@@ -29,7 +29,7 @@ export class SchedulesService {
 
   async getMySchedule(userId: string, tenantId: string) {
     const employee = await this.prisma.employee.findUnique({
-      where: { userId },
+      where: { id: userId },
     });
 
     if (!employee || employee.tenantId !== tenantId) {

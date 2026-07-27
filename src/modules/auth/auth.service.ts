@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, Inject, BadRequestException } from '
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../database/prisma.service.js';
 import { LoginDto } from './dto/login.dto.js';
+import { RegisterEmployeeDto } from './dto/register-employee.dto.js';
 import * as argon2 from 'argon2';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
@@ -73,6 +74,8 @@ export class AuthService {
       roles,
     });
   }
+
+  // registerEmployee method has been moved to MobileAuthService
 
   async authenticateWithTwoFactor(tempToken: string, code: string) {
     try {

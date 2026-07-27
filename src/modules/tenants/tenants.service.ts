@@ -148,4 +148,24 @@ export class TenantsService {
       where: { id },
     });
   }
+
+  async verifyBySlug(slug: string) {
+    const tenant = await this.prisma.tenant.findUnique({
+      where: { slug },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        settings: {
+          select: {
+            logoUrl: true,
+            primaryColor: true,
+          }
+        }
+      }
+    });
+
+    if (!tenant) throw new NotFoundException('Company not found');
+    return tenant;
+  }
 }

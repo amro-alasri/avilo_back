@@ -244,7 +244,10 @@ export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof
 export const EmployeeScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
-  userId: 'userId',
+  email: 'email',
+  password: 'password',
+  firstName: 'firstName',
+  lastName: 'lastName',
   departmentId: 'departmentId',
   employeeNumber: 'employeeNumber',
   status: 'status',

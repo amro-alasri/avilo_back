@@ -46,15 +46,11 @@ export class DashboardService {
       // Recent Activity
       this.prisma.attendance.findMany({
         where: { tenantId },
-        orderBy: { checkIn: 'desc' },
+        orderBy: { createdAt: 'desc' },
         take: 4,
         include: {
           employee: {
-            include: {
-              user: {
-                select: { firstName: true, lastName: true },
-              },
-            },
+            select: { firstName: true, lastName: true }
           },
         },
       })
@@ -63,7 +59,8 @@ export class DashboardService {
     // Format recent activity
     const activityFormatted = recentActivity.map((record) => ({
       id: record.id,
-      message: `${record.employee.user.firstName} ${record.employee.user.lastName} checked in`,
+      action: record.checkOut ? 'Checked Out' : 'Checked In',
+      employee: `${record.employee.firstName} ${record.employee.lastName}`,
       time: record.checkIn,
       branch: 'Main Branch', // Could be fetched from shift/branch
     }));

@@ -8,6 +8,9 @@ import { JwtStrategy } from './strategies/jwt.strategy.js';
 import { PrismaModule } from '../../database/prisma.module.js';
 import { CacheModule } from '@nestjs/cache-manager';
 
+import { MobileAuthService } from './mobile-auth.service.js';
+import { MobileAuthController } from './mobile-auth.controller.js';
+
 @Module({
   imports: [
     PrismaModule,
@@ -24,8 +27,8 @@ import { CacheModule } from '@nestjs/cache-manager';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
+  controllers: [AuthController, MobileAuthController],
+  providers: [AuthService, JwtStrategy, MobileAuthService],
+  exports: [AuthService, MobileAuthService],
 })
 export class AuthModule {}

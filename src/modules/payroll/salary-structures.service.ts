@@ -65,7 +65,7 @@ export class SalaryStructuresService {
         include: { 
           components: true,
           employee: {
-            include: { user: { select: { firstName: true, lastName: true } } }
+            select: { firstName: true, lastName: true }
           }
         },
         skip,

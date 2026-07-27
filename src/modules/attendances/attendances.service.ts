@@ -7,9 +7,8 @@ export class AttendancesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async checkIn(userId: string, tenantId: string, dto: CheckInDto) {
-    // Get the employee
     const employee = await this.prisma.employee.findUnique({
-      where: { userId },
+      where: { id: userId },
     });
 
     if (!employee || employee.tenantId !== tenantId) {
@@ -57,7 +56,7 @@ export class AttendancesService {
 
   async checkOut(userId: string, tenantId: string, dto: CheckOutDto) {
     const employee = await this.prisma.employee.findUnique({
-      where: { userId },
+      where: { id: userId },
     });
 
     if (!employee || employee.tenantId !== tenantId) {
@@ -100,7 +99,7 @@ export class AttendancesService {
 
   async getMyTodayAttendance(userId: string, tenantId: string) {
     const employee = await this.prisma.employee.findUnique({
-      where: { userId },
+      where: { id: userId },
     });
 
     if (!employee || employee.tenantId !== tenantId) {
@@ -141,7 +140,7 @@ export class AttendancesService {
         where,
         include: {
           employee: {
-            include: { user: { select: { firstName: true, lastName: true } } }
+            select: { firstName: true, lastName: true }
           }
         },
         skip,

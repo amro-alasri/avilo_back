@@ -14,7 +14,7 @@ export class LeavesService {
 
   async getMyBalances(userId: string, tenantId: string) {
     const employee = await this.prisma.employee.findUnique({
-      where: { userId },
+      where: { id: userId },
     });
 
     if (!employee || employee.tenantId !== tenantId) {
@@ -37,7 +37,7 @@ export class LeavesService {
 
   async createLeaveRequest(userId: string, tenantId: string, dto: CreateLeaveRequestDto) {
     const employee = await this.prisma.employee.findUnique({
-      where: { userId },
+      where: { id: userId },
     });
 
     if (!employee || employee.tenantId !== tenantId) {
@@ -71,7 +71,7 @@ export class LeavesService {
 
   async updateLeaveStatus(requestId: string, tenantId: string, reviewerUserId: string, dto: UpdateLeaveStatusDto) {
     const reviewer = await this.prisma.employee.findUnique({
-      where: { userId: reviewerUserId },
+      where: { id: reviewerUserId },
     });
 
     if (!reviewer || reviewer.tenantId !== tenantId) {

@@ -185,7 +185,7 @@ export class PayrollService {
         payslips: {
           include: {
             employee: {
-              include: { user: { select: { firstName: true, lastName: true } } }
+              select: { firstName: true, lastName: true }
             }
           }
         }
@@ -201,7 +201,7 @@ export class PayrollService {
       where: { id: payslipId },
       include: {
         employee: {
-          include: { user: { select: { firstName: true, lastName: true } } }
+          select: { firstName: true, lastName: true }
         },
         payrollRun: true,
       }

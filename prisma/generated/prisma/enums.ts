@@ -40,6 +40,7 @@ export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]
 
 
 export const EmployeeStatus = {
+  pending: 'pending',
   active: 'active',
   on_leave: 'on_leave',
   terminated: 'terminated',

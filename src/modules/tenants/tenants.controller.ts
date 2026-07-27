@@ -6,6 +6,7 @@ import { PaginationDto } from '../../core/pagination/pagination.dto.js';
 import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard.js';
 import { RolesGuard } from '../../core/guards/roles.guard.js';
 import { Roles } from '../../core/decorators/roles.decorator.js';
+import { Public } from '../../core/decorators/public.decorator.js';
 
 @Controller('tenants')
 export class TenantsController {
@@ -17,6 +18,12 @@ export class TenantsController {
   // but in reality it should have captcha + rate limit or be admin-only
   create(@Body() createTenantDto: CreateTenantDto) {
     return this.tenantsService.create(createTenantDto);
+  }
+
+  @Public()
+  @Get('verify/:slug')
+  verifyBySlug(@Param('slug') slug: string) {
+    return this.tenantsService.verifyBySlug(slug);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
