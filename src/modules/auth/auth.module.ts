@@ -6,11 +6,13 @@ import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
 import { JwtStrategy } from './strategies/jwt.strategy.js';
 import { PrismaModule } from '../../database/prisma.module.js';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
     PrismaModule,
     PassportModule,
+    CacheModule.register(),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

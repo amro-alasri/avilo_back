@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
 import { TenantsService } from './tenants.service.js';
 import { CreateTenantDto } from './dto/create-tenant.dto.js';
 import { UpdateTenantDto } from './dto/update-tenant.dto.js';
@@ -20,23 +20,30 @@ export class TenantsController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('System Admin') // Only system level admins can list all tenants
+  @Roles('SuperAdmin') // Only system level admins can list all tenants
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
     return this.tenantsService.findAll(paginationDto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('System Admin')
+  @Roles('SuperAdmin')
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tenantsService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('System Admin')
+  @Roles('SuperAdmin')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
     return this.tenantsService.update(id, updateTenantDto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('SuperAdmin')
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.tenantsService.remove(id);
   }
 }

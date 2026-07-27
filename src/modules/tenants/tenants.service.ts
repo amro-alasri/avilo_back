@@ -141,4 +141,11 @@ export class TenantsService {
       data: updateTenantDto,
     });
   }
+
+  async remove(id: string) {
+    await this.findOne(id); // verify existence
+    return this.prisma.tenant.delete({
+      where: { id },
+    });
+  }
 }
