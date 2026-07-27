@@ -4,7 +4,10 @@ enum EmployeeStatus {
   active = 'active',
   on_leave = 'on_leave',
   terminated = 'terminated',
-  probation = 'probation'
+  probation = 'probation',
+  pending = 'pending',
+  suspended = 'suspended',
+  rejected = 'rejected'
 }
 
 enum Gender {
