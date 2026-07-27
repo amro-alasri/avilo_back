@@ -16,6 +16,7 @@ import { SchedulesModule } from './modules/schedules/schedules.module';
 import { PayrollModule } from './modules/payroll/payroll.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ReportsModule } from './modules/reports/reports.module';
     PayrollModule,
     BillingModule,
     ReportsModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
