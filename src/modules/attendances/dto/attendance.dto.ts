@@ -4,10 +4,24 @@ import { AttendanceMethod } from '../../../../prisma/generated/prisma/enums.js';
 
 class LocationDto {
   @IsNumber()
-  lat: number;
+  latitude: number;
 
   @IsNumber()
-  lng: number;
+  longitude: number;
+
+  @IsNumber()
+  accuracy: number;
+
+  @IsOptional()
+  @IsNumber()
+  speed?: number;
+
+  @IsOptional()
+  @IsNumber()
+  heading?: number;
+
+  @IsOptional()
+  isMockLocation?: boolean;
 
   @IsOptional()
   address?: string;

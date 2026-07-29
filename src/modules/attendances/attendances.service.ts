@@ -1,14 +1,33 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../database/prisma.service';
-import { CheckInDto, CheckOutDto } from './dto/attendance.dto';
+import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
+import { PrismaService } from '../../database/prisma.service.js';
+import { CheckInDto, CheckOutDto } from './dto/attendance.dto.js';
+import { LocationVerificationService } from './services/location-verification.service.js';
+import { DeviceVerificationService } from './services/device-verification.service.js';
+import { FaceVerificationService } from './services/face-verification.service.js';
+import { AttendancePolicyService } from './services/attendance-policy.service.js';
 
 @Injectable()
 export class AttendancesService {
-  constructor(private readonly prisma: PrismaService) {}
+  private readonly logger = new Logger(AttendancesService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly locationVerificationService: LocationVerificationService,
+    private readonly deviceVerificationService: DeviceVerificationService,
+    private readonly faceVerificationService: FaceVerificationService,
+    private readonly attendancePolicyService: AttendancePolicyService,
+  ) {}
 
   async checkIn(userId: string, tenantId: string, dto: CheckInDto) {
     const employee = await this.prisma.employee.findUnique({
       where: { id: userId },
+      include: {
+        department: {
+          include: {
+            branch: true
+          }
+        }
+      }
     });
 
     if (!employee || employee.tenantId !== tenantId) {
@@ -37,9 +56,37 @@ export class AttendancesService {
       throw new BadRequestException('Already checked in today');
     }
 
-    // Determine status based on schedule (mocked for now, in a real system we fetch schedule)
-    // For now we just default to "present"
-    const status = 'present'; 
+    let confidenceScore = 100;
+    let finalStatus = 'present';
+    let notes = '';
+
+    // If using GPS method, run the Verification Engine
+    if (dto.method === 'gps' && dto.location) {
+      const branch = employee.department?.branch;
+      if (!branch) {
+        this.logger.warn(`Employee ${employee.id} has no branch assigned.`);
+      }
+
+      const branchData = {
+        latitude: branch?.latitude || null,
+        longitude: branch?.longitude || null,
+        geofenceRadius: branch?.geofenceRadius || null,
+      };
+
+      const locResult = this.locationVerificationService.verify(branchData, dto.location);
+      const devResult = this.deviceVerificationService.verify(dto.location);
+      // Face verification is stubbed for now (true if face matched, undefined if not provided)
+      const faceResult = this.faceVerificationService.verify(undefined); 
+
+      // Evaluate Policy
+      const decision = this.attendancePolicyService.evaluate([locResult, devResult, faceResult]);
+      
+      confidenceScore = decision.totalScore;
+      finalStatus = decision.status;
+      if (decision.reasons.length > 0) {
+        notes = decision.reasons.join(', ');
+      }
+    }
 
     return this.prisma.attendance.create({
       data: {
@@ -49,7 +96,9 @@ export class AttendancesService {
         checkIn: new Date(),
         checkInMethod: dto.method,
         checkInLocation: dto.location ? (dto.location as any) : undefined,
-        status,
+        status: finalStatus,
+        confidenceScore,
+        notes: notes || undefined,
       },
     });
   }
@@ -87,12 +136,46 @@ export class AttendancesService {
       throw new BadRequestException('Already checked out today');
     }
 
+    let confidenceScore = 100;
+    let finalStatus = existing.status; // Keep existing status or update it? We'll just keep it but calculate score
+    let notes = existing.notes || '';
+
+    // If using GPS method, run the Verification Engine
+    if (dto.method === 'gps' && dto.location) {
+      const employeeWithBranch = await this.prisma.employee.findUnique({
+        where: { id: userId },
+        include: { department: { include: { branch: true } } }
+      });
+      const branch = employeeWithBranch?.department?.branch;
+
+      const branchData = {
+        latitude: branch?.latitude || null,
+        longitude: branch?.longitude || null,
+        geofenceRadius: branch?.geofenceRadius || null,
+      };
+
+      const locResult = this.locationVerificationService.verify(branchData, dto.location);
+      const devResult = this.deviceVerificationService.verify(dto.location);
+      const faceResult = this.faceVerificationService.verify(undefined); 
+
+      // Evaluate Policy
+      const decision = this.attendancePolicyService.evaluate([locResult, devResult, faceResult]);
+      
+      confidenceScore = decision.totalScore;
+      if (decision.reasons.length > 0) {
+        notes = notes ? `${notes} | Checkout: ${decision.reasons.join(', ')}` : `Checkout: ${decision.reasons.join(', ')}`;
+      }
+    }
+
     return this.prisma.attendance.update({
       where: { id: existing.id },
       data: {
         checkOut: new Date(),
         checkOutMethod: dto.method,
         checkOutLocation: dto.location ? (dto.location as any) : undefined,
+        notes: notes || undefined,
+        // We could store check-in and check-out scores separately, but for now we just keep the checkIn score
+        // or update it to be the average. Let's just update the notes for checkout.
       },
     });
   }

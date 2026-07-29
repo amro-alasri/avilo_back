@@ -39,6 +39,7 @@ export class EmployeesService {
         jobTitle: dto.jobTitle,
         joinDate: new Date(dto.joinDate),
         departmentId: dto.departmentId,
+        branchId: dto.branchId,
         status: dto.status as any || 'active',
         birthDate: dto.birthDate ? new Date(dto.birthDate) : null,
         gender: dto.gender as any,
@@ -78,8 +79,12 @@ export class EmployeesService {
           status: true,
           createdAt: true,
           departmentId: true,
+          branchId: true,
           department: {
             select: { id: true, name: true, branch: { select: { id: true, name: true } } },
+          },
+          branch: {
+            select: { id: true, name: true }
           },
         },
         orderBy: { createdAt: 'desc' },
@@ -106,7 +111,9 @@ export class EmployeesService {
         gender: true,
         phone: true,
         departmentId: true,
+        branchId: true,
         department: true,
+        branch: true,
       },
     });
 
@@ -129,6 +136,7 @@ export class EmployeesService {
         jobTitle: dto.jobTitle,
         joinDate: dto.joinDate ? new Date(dto.joinDate) : undefined,
         departmentId: dto.departmentId,
+        branchId: dto.branchId,
         status: dto.status as any,
         birthDate: dto.birthDate ? new Date(dto.birthDate) : undefined,
         gender: dto.gender as any,

@@ -249,6 +249,7 @@ export const EmployeeScalarFieldEnum = {
   firstName: 'firstName',
   lastName: 'lastName',
   departmentId: 'departmentId',
+  branchId: 'branchId',
   employeeNumber: 'employeeNumber',
   status: 'status',
   jobTitle: 'jobTitle',
@@ -321,6 +322,7 @@ export const AttendanceScalarFieldEnum = {
   checkOutLocation: 'checkOutLocation',
   status: 'status',
   notes: 'notes',
+  confidenceScore: 'confidenceScore',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

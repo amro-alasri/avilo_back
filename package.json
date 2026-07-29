@@ -45,6 +45,7 @@
     "class-validator": "^0.15.1",
     "date-fns": "^4.4.0",
     "fastify": "^5.10.0",
+    "geolib": "^3.3.14",
     "minio": "^8.0.7",
     "nanoid": "^6.0.0",
     "otplib": "^12.0.1",

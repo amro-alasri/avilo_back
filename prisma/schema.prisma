@@ -246,6 +246,7 @@ model Branch {
   geofenceRadius  Int?     @map("geofence_radius") // in meters
   
   departments     Department[]
+  employees       Employee[]
 
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -284,8 +285,10 @@ model Employee {
   firstName       String         @map("first_name")
   lastName        String         @map("last_name")
   departmentId    String?        @map("department_id")
+  branchId        String?        @map("branch_id")
   
   department      Department?    @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  branch          Branch?        @relation(fields: [branchId], references: [id], onDelete: SetNull)
   
   employeeNumber  String         @map("employee_number")
   status          EmployeeStatus @default(active)
@@ -387,10 +390,11 @@ model Attendance {
   checkOut        DateTime?        @map("check_out")
   checkInMethod   AttendanceMethod? @map("check_in_method")
   checkOutMethod  AttendanceMethod? @map("check_out_method")
-  checkInLocation Json?            @map("check_in_location") // {lat, lng, address}
+  checkInLocation Json?            @map("check_in_location") // {lat, lng, accuracy, speed, heading, isMock, etc}
   checkOutLocation Json?           @map("check_out_location")
   status          String           @default("present") // present, late, absent, half_day
   notes           String?
+  confidenceScore Float?           @map("confidence_score") // Score from 0 to 100
   
   createdAt       DateTime         @default(now()) @map("created_at")
   updatedAt       DateTime         @updatedAt @map("updated_at")

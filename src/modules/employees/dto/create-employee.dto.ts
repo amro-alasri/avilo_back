@@ -45,6 +45,10 @@ export class CreateEmployeeDto {
   departmentId?: string;
 
   @IsOptional()
+  @IsString()
+  branchId?: string;
+
+  @IsOptional()
   @IsEnum(EmployeeStatus)
   status?: EmployeeStatus;
 

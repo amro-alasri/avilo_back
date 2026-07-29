@@ -41,7 +41,9 @@ export class OrganizationsService {
         orgId: dto.orgId,
         name: dto.name,
         address: dto.location,
-        // timezone: dto.timezone, // Assuming timezone might need to be added to Prisma if needed, but not in schema now. Let's omit or put in settings if needed. Wait, Branch has no timezone in schema. I'll just remove timezone here.
+        latitude: dto.latitude,
+        longitude: dto.longitude,
+        geofenceRadius: dto.geofenceRadius,
       },
     });
   }
