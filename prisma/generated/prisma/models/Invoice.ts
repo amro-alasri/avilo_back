@@ -469,14 +469,6 @@ export type InvoiceUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.InvoiceScalarWhereInput | Prisma.InvoiceScalarWhereInput[]
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type InvoiceCreateWithoutTenantInput = {
   id?: string
   amount: number

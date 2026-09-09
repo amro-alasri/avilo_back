@@ -20,8 +20,22 @@ export type SubscriptionModel = runtime.Types.Result.DefaultSelection<Prisma.$Su
 
 export type AggregateSubscription = {
   _count: SubscriptionCountAggregateOutputType | null
+  _avg: SubscriptionAvgAggregateOutputType | null
+  _sum: SubscriptionSumAggregateOutputType | null
   _min: SubscriptionMinAggregateOutputType | null
   _max: SubscriptionMaxAggregateOutputType | null
+}
+
+export type SubscriptionAvgAggregateOutputType = {
+  price: number | null
+  maxEmployees: number | null
+  maxLocations: number | null
+}
+
+export type SubscriptionSumAggregateOutputType = {
+  price: number | null
+  maxEmployees: number | null
+  maxLocations: number | null
 }
 
 export type SubscriptionMinAggregateOutputType = {
@@ -32,6 +46,14 @@ export type SubscriptionMinAggregateOutputType = {
   billingCycle: string | null
   startDate: Date | null
   endDate: Date | null
+  price: number | null
+  currency: string | null
+  maxEmployees: number | null
+  maxLocations: number | null
+  hasPayroll: boolean | null
+  hasLeaves: boolean | null
+  hasVoiceBiometrics: boolean | null
+  hasFaceBiometrics: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -44,6 +66,14 @@ export type SubscriptionMaxAggregateOutputType = {
   billingCycle: string | null
   startDate: Date | null
   endDate: Date | null
+  price: number | null
+  currency: string | null
+  maxEmployees: number | null
+  maxLocations: number | null
+  hasPayroll: boolean | null
+  hasLeaves: boolean | null
+  hasVoiceBiometrics: boolean | null
+  hasFaceBiometrics: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,11 +86,32 @@ export type SubscriptionCountAggregateOutputType = {
   billingCycle: number
   startDate: number
   endDate: number
+  price: number
+  currency: number
+  maxEmployees: number
+  maxLocations: number
+  hasPayroll: number
+  hasLeaves: number
+  hasVoiceBiometrics: number
+  hasFaceBiometrics: number
+  features: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type SubscriptionAvgAggregateInputType = {
+  price?: true
+  maxEmployees?: true
+  maxLocations?: true
+}
+
+export type SubscriptionSumAggregateInputType = {
+  price?: true
+  maxEmployees?: true
+  maxLocations?: true
+}
 
 export type SubscriptionMinAggregateInputType = {
   id?: true
@@ -70,6 +121,14 @@ export type SubscriptionMinAggregateInputType = {
   billingCycle?: true
   startDate?: true
   endDate?: true
+  price?: true
+  currency?: true
+  maxEmployees?: true
+  maxLocations?: true
+  hasPayroll?: true
+  hasLeaves?: true
+  hasVoiceBiometrics?: true
+  hasFaceBiometrics?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -82,6 +141,14 @@ export type SubscriptionMaxAggregateInputType = {
   billingCycle?: true
   startDate?: true
   endDate?: true
+  price?: true
+  currency?: true
+  maxEmployees?: true
+  maxLocations?: true
+  hasPayroll?: true
+  hasLeaves?: true
+  hasVoiceBiometrics?: true
+  hasFaceBiometrics?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -94,6 +161,15 @@ export type SubscriptionCountAggregateInputType = {
   billingCycle?: true
   startDate?: true
   endDate?: true
+  price?: true
+  currency?: true
+  maxEmployees?: true
+  maxLocations?: true
+  hasPayroll?: true
+  hasLeaves?: true
+  hasVoiceBiometrics?: true
+  hasFaceBiometrics?: true
+  features?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -137,6 +213,18 @@ export type SubscriptionAggregateArgs<ExtArgs extends runtime.Types.Extensions.I
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: SubscriptionAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: SubscriptionSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: SubscriptionMinAggregateInputType
@@ -167,6 +255,8 @@ export type SubscriptionGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   _count?: SubscriptionCountAggregateInputType | true
+  _avg?: SubscriptionAvgAggregateInputType
+  _sum?: SubscriptionSumAggregateInputType
   _min?: SubscriptionMinAggregateInputType
   _max?: SubscriptionMaxAggregateInputType
 }
@@ -179,9 +269,20 @@ export type SubscriptionGroupByOutputType = {
   billingCycle: string
   startDate: Date
   endDate: Date | null
+  price: number
+  currency: string
+  maxEmployees: number
+  maxLocations: number
+  hasPayroll: boolean
+  hasLeaves: boolean
+  hasVoiceBiometrics: boolean
+  hasFaceBiometrics: boolean
+  features: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: SubscriptionCountAggregateOutputType | null
+  _avg: SubscriptionAvgAggregateOutputType | null
+  _sum: SubscriptionSumAggregateOutputType | null
   _min: SubscriptionMinAggregateOutputType | null
   _max: SubscriptionMaxAggregateOutputType | null
 }
@@ -212,6 +313,15 @@ export type SubscriptionWhereInput = {
   billingCycle?: Prisma.StringFilter<"Subscription"> | string
   startDate?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
+  price?: Prisma.FloatFilter<"Subscription"> | number
+  currency?: Prisma.StringFilter<"Subscription"> | string
+  maxEmployees?: Prisma.IntFilter<"Subscription"> | number
+  maxLocations?: Prisma.IntFilter<"Subscription"> | number
+  hasPayroll?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasLeaves?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasVoiceBiometrics?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasFaceBiometrics?: Prisma.BoolFilter<"Subscription"> | boolean
+  features?: Prisma.JsonNullableFilter<"Subscription">
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -225,6 +335,15 @@ export type SubscriptionOrderByWithRelationInput = {
   billingCycle?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  price?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
+  hasPayroll?: Prisma.SortOrder
+  hasLeaves?: Prisma.SortOrder
+  hasVoiceBiometrics?: Prisma.SortOrder
+  hasFaceBiometrics?: Prisma.SortOrder
+  features?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -241,6 +360,15 @@ export type SubscriptionWhereUniqueInput = Prisma.AtLeast<{
   billingCycle?: Prisma.StringFilter<"Subscription"> | string
   startDate?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
+  price?: Prisma.FloatFilter<"Subscription"> | number
+  currency?: Prisma.StringFilter<"Subscription"> | string
+  maxEmployees?: Prisma.IntFilter<"Subscription"> | number
+  maxLocations?: Prisma.IntFilter<"Subscription"> | number
+  hasPayroll?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasLeaves?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasVoiceBiometrics?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasFaceBiometrics?: Prisma.BoolFilter<"Subscription"> | boolean
+  features?: Prisma.JsonNullableFilter<"Subscription">
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -254,11 +382,22 @@ export type SubscriptionOrderByWithAggregationInput = {
   billingCycle?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  price?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
+  hasPayroll?: Prisma.SortOrder
+  hasLeaves?: Prisma.SortOrder
+  hasVoiceBiometrics?: Prisma.SortOrder
+  hasFaceBiometrics?: Prisma.SortOrder
+  features?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SubscriptionCountOrderByAggregateInput
+  _avg?: Prisma.SubscriptionAvgOrderByAggregateInput
   _max?: Prisma.SubscriptionMaxOrderByAggregateInput
   _min?: Prisma.SubscriptionMinOrderByAggregateInput
+  _sum?: Prisma.SubscriptionSumOrderByAggregateInput
 }
 
 export type SubscriptionScalarWhereWithAggregatesInput = {
@@ -272,17 +411,35 @@ export type SubscriptionScalarWhereWithAggregatesInput = {
   billingCycle?: Prisma.StringWithAggregatesFilter<"Subscription"> | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Subscription"> | Date | string
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
+  price?: Prisma.FloatWithAggregatesFilter<"Subscription"> | number
+  currency?: Prisma.StringWithAggregatesFilter<"Subscription"> | string
+  maxEmployees?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
+  maxLocations?: Prisma.IntWithAggregatesFilter<"Subscription"> | number
+  hasPayroll?: Prisma.BoolWithAggregatesFilter<"Subscription"> | boolean
+  hasLeaves?: Prisma.BoolWithAggregatesFilter<"Subscription"> | boolean
+  hasVoiceBiometrics?: Prisma.BoolWithAggregatesFilter<"Subscription"> | boolean
+  hasFaceBiometrics?: Prisma.BoolWithAggregatesFilter<"Subscription"> | boolean
+  features?: Prisma.JsonNullableWithAggregatesFilter<"Subscription">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Subscription"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Subscription"> | Date | string
 }
 
 export type SubscriptionCreateInput = {
   id?: string
-  plan: $Enums.TenantPlan
-  status: string
-  billingCycle: string
+  plan?: $Enums.TenantPlan
+  status?: string
+  billingCycle?: string
   startDate: Date | string
   endDate?: Date | string | null
+  price?: number
+  currency?: string
+  maxEmployees?: number
+  maxLocations?: number
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSubscriptionsInput
@@ -291,11 +448,20 @@ export type SubscriptionCreateInput = {
 export type SubscriptionUncheckedCreateInput = {
   id?: string
   tenantId: string
-  plan: $Enums.TenantPlan
-  status: string
-  billingCycle: string
+  plan?: $Enums.TenantPlan
+  status?: string
+  billingCycle?: string
   startDate: Date | string
   endDate?: Date | string | null
+  price?: number
+  currency?: string
+  maxEmployees?: number
+  maxLocations?: number
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -307,6 +473,15 @@ export type SubscriptionUpdateInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSubscriptionsNestedInput
@@ -320,6 +495,15 @@ export type SubscriptionUncheckedUpdateInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -327,11 +511,20 @@ export type SubscriptionUncheckedUpdateInput = {
 export type SubscriptionCreateManyInput = {
   id?: string
   tenantId: string
-  plan: $Enums.TenantPlan
-  status: string
-  billingCycle: string
+  plan?: $Enums.TenantPlan
+  status?: string
+  billingCycle?: string
   startDate: Date | string
   endDate?: Date | string | null
+  price?: number
+  currency?: string
+  maxEmployees?: number
+  maxLocations?: number
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -343,6 +536,15 @@ export type SubscriptionUpdateManyMutationInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -355,6 +557,15 @@ export type SubscriptionUncheckedUpdateManyInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -377,8 +588,23 @@ export type SubscriptionCountOrderByAggregateInput = {
   billingCycle?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
+  hasPayroll?: Prisma.SortOrder
+  hasLeaves?: Prisma.SortOrder
+  hasVoiceBiometrics?: Prisma.SortOrder
+  hasFaceBiometrics?: Prisma.SortOrder
+  features?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type SubscriptionAvgOrderByAggregateInput = {
+  price?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
 }
 
 export type SubscriptionMaxOrderByAggregateInput = {
@@ -389,6 +615,14 @@ export type SubscriptionMaxOrderByAggregateInput = {
   billingCycle?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
+  hasPayroll?: Prisma.SortOrder
+  hasLeaves?: Prisma.SortOrder
+  hasVoiceBiometrics?: Prisma.SortOrder
+  hasFaceBiometrics?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -401,8 +635,22 @@ export type SubscriptionMinOrderByAggregateInput = {
   billingCycle?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
+  hasPayroll?: Prisma.SortOrder
+  hasLeaves?: Prisma.SortOrder
+  hasVoiceBiometrics?: Prisma.SortOrder
+  hasFaceBiometrics?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type SubscriptionSumOrderByAggregateInput = {
+  price?: Prisma.SortOrder
+  maxEmployees?: Prisma.SortOrder
+  maxLocations?: Prisma.SortOrder
 }
 
 export type SubscriptionCreateNestedManyWithoutTenantInput = {
@@ -451,24 +699,62 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
+}
+
 export type SubscriptionCreateWithoutTenantInput = {
   id?: string
-  plan: $Enums.TenantPlan
-  status: string
-  billingCycle: string
+  plan?: $Enums.TenantPlan
+  status?: string
+  billingCycle?: string
   startDate: Date | string
   endDate?: Date | string | null
+  price?: number
+  currency?: string
+  maxEmployees?: number
+  maxLocations?: number
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type SubscriptionUncheckedCreateWithoutTenantInput = {
   id?: string
-  plan: $Enums.TenantPlan
-  status: string
-  billingCycle: string
+  plan?: $Enums.TenantPlan
+  status?: string
+  billingCycle?: string
   startDate: Date | string
   endDate?: Date | string | null
+  price?: number
+  currency?: string
+  maxEmployees?: number
+  maxLocations?: number
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -510,17 +796,35 @@ export type SubscriptionScalarWhereInput = {
   billingCycle?: Prisma.StringFilter<"Subscription"> | string
   startDate?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"Subscription"> | Date | string | null
+  price?: Prisma.FloatFilter<"Subscription"> | number
+  currency?: Prisma.StringFilter<"Subscription"> | string
+  maxEmployees?: Prisma.IntFilter<"Subscription"> | number
+  maxLocations?: Prisma.IntFilter<"Subscription"> | number
+  hasPayroll?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasLeaves?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasVoiceBiometrics?: Prisma.BoolFilter<"Subscription"> | boolean
+  hasFaceBiometrics?: Prisma.BoolFilter<"Subscription"> | boolean
+  features?: Prisma.JsonNullableFilter<"Subscription">
   createdAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Subscription"> | Date | string
 }
 
 export type SubscriptionCreateManyTenantInput = {
   id?: string
-  plan: $Enums.TenantPlan
-  status: string
-  billingCycle: string
+  plan?: $Enums.TenantPlan
+  status?: string
+  billingCycle?: string
   startDate: Date | string
   endDate?: Date | string | null
+  price?: number
+  currency?: string
+  maxEmployees?: number
+  maxLocations?: number
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -532,6 +836,15 @@ export type SubscriptionUpdateWithoutTenantInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -543,6 +856,15 @@ export type SubscriptionUncheckedUpdateWithoutTenantInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -554,6 +876,15 @@ export type SubscriptionUncheckedUpdateManyWithoutTenantInput = {
   billingCycle?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  maxEmployees?: Prisma.IntFieldUpdateOperationsInput | number
+  maxLocations?: Prisma.IntFieldUpdateOperationsInput | number
+  hasPayroll?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasLeaves?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasVoiceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hasFaceBiometrics?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  features?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -568,6 +899,15 @@ export type SubscriptionSelect<ExtArgs extends runtime.Types.Extensions.Internal
   billingCycle?: boolean
   startDate?: boolean
   endDate?: boolean
+  price?: boolean
+  currency?: boolean
+  maxEmployees?: boolean
+  maxLocations?: boolean
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -581,6 +921,15 @@ export type SubscriptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   billingCycle?: boolean
   startDate?: boolean
   endDate?: boolean
+  price?: boolean
+  currency?: boolean
+  maxEmployees?: boolean
+  maxLocations?: boolean
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -594,6 +943,15 @@ export type SubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   billingCycle?: boolean
   startDate?: boolean
   endDate?: boolean
+  price?: boolean
+  currency?: boolean
+  maxEmployees?: boolean
+  maxLocations?: boolean
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -607,11 +965,20 @@ export type SubscriptionSelectScalar = {
   billingCycle?: boolean
   startDate?: boolean
   endDate?: boolean
+  price?: boolean
+  currency?: boolean
+  maxEmployees?: boolean
+  maxLocations?: boolean
+  hasPayroll?: boolean
+  hasLeaves?: boolean
+  hasVoiceBiometrics?: boolean
+  hasFaceBiometrics?: boolean
+  features?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "plan" | "status" | "billingCycle" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
+export type SubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "plan" | "status" | "billingCycle" | "startDate" | "endDate" | "price" | "currency" | "maxEmployees" | "maxLocations" | "hasPayroll" | "hasLeaves" | "hasVoiceBiometrics" | "hasFaceBiometrics" | "features" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
 export type SubscriptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
@@ -635,6 +1002,15 @@ export type $SubscriptionPayload<ExtArgs extends runtime.Types.Extensions.Intern
     billingCycle: string
     startDate: Date
     endDate: Date | null
+    price: number
+    currency: string
+    maxEmployees: number
+    maxLocations: number
+    hasPayroll: boolean
+    hasLeaves: boolean
+    hasVoiceBiometrics: boolean
+    hasFaceBiometrics: boolean
+    features: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["subscription"]>
@@ -1068,6 +1444,15 @@ export interface SubscriptionFieldRefs {
   readonly billingCycle: Prisma.FieldRef<"Subscription", 'String'>
   readonly startDate: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Subscription", 'DateTime'>
+  readonly price: Prisma.FieldRef<"Subscription", 'Float'>
+  readonly currency: Prisma.FieldRef<"Subscription", 'String'>
+  readonly maxEmployees: Prisma.FieldRef<"Subscription", 'Int'>
+  readonly maxLocations: Prisma.FieldRef<"Subscription", 'Int'>
+  readonly hasPayroll: Prisma.FieldRef<"Subscription", 'Boolean'>
+  readonly hasLeaves: Prisma.FieldRef<"Subscription", 'Boolean'>
+  readonly hasVoiceBiometrics: Prisma.FieldRef<"Subscription", 'Boolean'>
+  readonly hasFaceBiometrics: Prisma.FieldRef<"Subscription", 'Boolean'>
+  readonly features: Prisma.FieldRef<"Subscription", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Subscription", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Subscription", 'DateTime'>
 }

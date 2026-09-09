@@ -469,14 +469,6 @@ export type ShiftUncheckedUpdateManyWithoutScheduleNestedInput = {
   deleteMany?: Prisma.ShiftScalarWhereInput | Prisma.ShiftScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ShiftCreateWithoutScheduleInput = {
   id?: string
   dayOfWeek: number

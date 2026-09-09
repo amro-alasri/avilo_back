@@ -41,6 +41,8 @@ export class TenantsService {
           name: createTenantDto.name,
           slug: createTenantDto.slug,
           domain: domain,
+          contactEmail: createTenantDto.contactEmail || createTenantDto.adminEmail,
+          contactPhone: createTenantDto.contactPhone || null,
           status: 'trial',
         },
       });

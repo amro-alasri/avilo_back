@@ -2549,6 +2549,8 @@ export const TenantScalarFieldEnum = {
   domain: 'domain',
   status: 'status',
   plan: 'plan',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2581,6 +2583,15 @@ export const SubscriptionScalarFieldEnum = {
   billingCycle: 'billingCycle',
   startDate: 'startDate',
   endDate: 'endDate',
+  price: 'price',
+  currency: 'currency',
+  maxEmployees: 'maxEmployees',
+  maxLocations: 'maxLocations',
+  hasPayroll: 'hasPayroll',
+  hasLeaves: 'hasLeaves',
+  hasVoiceBiometrics: 'hasVoiceBiometrics',
+  hasFaceBiometrics: 'hasFaceBiometrics',
+  features: 'features',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -3114,16 +3125,16 @@ export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
 
 
 /**
- * Reference to a field of type 'UserStatus'
+ * Reference to a field of type 'Int'
  */
-export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus'>
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
     
 
 
 /**
- * Reference to a field of type 'UserStatus[]'
+ * Reference to a field of type 'Int[]'
  */
-export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus[]'>
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -3135,16 +3146,16 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'Int'
+ * Reference to a field of type 'UserStatus'
  */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+export type EnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus'>
     
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'UserStatus[]'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type ListEnumUserStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserStatus[]'>
     
 
 

@@ -10,6 +10,14 @@ export class UpdateTenantDto {
   @IsString()
   @Transform(({ value }) => (typeof value === 'string' && value.trim() !== '' ? value.trim() : null))
   domain?: string | null;
+
+  @IsOptional()
+  @IsString()
+  contactEmail?: string | null;
+
+  @IsOptional()
+  @IsString()
+  contactPhone?: string | null;
   
   @IsOptional()
   @IsString()

@@ -93,6 +93,9 @@ model Tenant {
   status    TenantStatus @default(active)
   plan      TenantPlan   @default(free)
   
+  contactEmail   String?      @map("contact_email")
+  contactPhone   String?      @map("contact_phone")
+
   settings       TenantSettings?
   subscriptions  Subscription[]
   invoices       Invoice[]
@@ -130,11 +133,23 @@ model Subscription {
   id              String     @id @default(uuid())
   tenantId        String     @map("tenant_id")
   tenant          Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  plan            TenantPlan
-  status          String
-  billingCycle    String     @map("billing_cycle") // monthly, yearly
+  plan            TenantPlan @default(starter)
+  status          String     @default("active") // active, expired, cancelled, pending
+  billingCycle    String     @default("monthly") @map("billing_cycle") // monthly, yearly, custom
   startDate       DateTime   @map("start_date")
   endDate         DateTime?  @map("end_date")
+  price           Float      @default(0)
+  currency        String     @default("USD")
+
+  // Feature Entitlements & Resource Quotas
+  maxEmployees    Int        @default(10) @map("max_employees")
+  maxLocations    Int        @default(1) @map("max_locations")
+  hasPayroll      Boolean    @default(true) @map("has_payroll")
+  hasLeaves       Boolean    @default(true) @map("has_leaves")
+  hasVoiceBiometrics Boolean @default(false) @map("has_voice_biometrics")
+  hasFaceBiometrics  Boolean @default(false) @map("has_face_biometrics")
+
+  features        Json?      @map("features")
   
   createdAt       DateTime   @default(now()) @map("created_at")
   updatedAt       DateTime   @updatedAt @map("updated_at")

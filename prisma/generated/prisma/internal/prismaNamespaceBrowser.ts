@@ -104,6 +104,8 @@ export const TenantScalarFieldEnum = {
   domain: 'domain',
   status: 'status',
   plan: 'plan',
+  contactEmail: 'contactEmail',
+  contactPhone: 'contactPhone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -136,6 +138,15 @@ export const SubscriptionScalarFieldEnum = {
   billingCycle: 'billingCycle',
   startDate: 'startDate',
   endDate: 'endDate',
+  price: 'price',
+  currency: 'currency',
+  maxEmployees: 'maxEmployees',
+  maxLocations: 'maxLocations',
+  hasPayroll: 'hasPayroll',
+  hasLeaves: 'hasLeaves',
+  hasVoiceBiometrics: 'hasVoiceBiometrics',
+  hasFaceBiometrics: 'hasFaceBiometrics',
+  features: 'features',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -15,6 +15,14 @@ export class CreateTenantDto {
   @Transform(({ value }) => (typeof value === 'string' && value.trim() !== '' ? value.trim() : null))
   domain?: string | null;
 
+  @IsOptional()
+  @IsEmail()
+  contactEmail?: string;
+
+  @IsOptional()
+  @IsString()
+  contactPhone?: string;
+
   @IsEmail()
   @IsNotEmpty()
   adminEmail: string;
