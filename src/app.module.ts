@@ -17,6 +17,8 @@ import { PayrollModule } from './modules/payroll/payroll.module';
 import { BillingModule } from './modules/billing/billing.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { MailModule } from './modules/mail/mail.module.js';
+import { SettingsModule } from './modules/settings/settings.module.js';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     BillingModule,
     ReportsModule,
     DashboardModule,
+    MailModule,
+    SettingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -116,6 +116,7 @@ model TenantSettings {
   language       String  @default("en")
   logoUrl        String? @map("logo_url")
   primaryColor   String? @map("primary_color")
+  emailSettings  Json?   @map("email_settings")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

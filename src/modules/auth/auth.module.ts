@@ -10,6 +10,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 import { MobileAuthService } from './mobile-auth.service.js';
 import { MobileAuthController } from './mobile-auth.controller.js';
+import { ProfileController } from './profile.controller.js';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { MobileAuthController } from './mobile-auth.controller.js';
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthController, MobileAuthController],
+  controllers: [AuthController, MobileAuthController, ProfileController],
   providers: [AuthService, JwtStrategy, MobileAuthService],
   exports: [AuthService, MobileAuthService],
 })

@@ -24,6 +24,8 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
         where: { domain: '' },
         data: { domain: null },
       });
+      // Ensure email_settings JSONB column exists on tenant_settings
+      await this.$executeRawUnsafe('ALTER TABLE "tenant_settings" ADD COLUMN IF NOT EXISTS "email_settings" JSONB;');
     } catch (_) {}
   }
 

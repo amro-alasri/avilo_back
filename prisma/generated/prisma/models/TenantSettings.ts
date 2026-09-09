@@ -59,6 +59,7 @@ export type TenantSettingsCountAggregateOutputType = {
   language: number
   logoUrl: number
   primaryColor: number
+  emailSettings: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -100,6 +101,7 @@ export type TenantSettingsCountAggregateInputType = {
   language?: true
   logoUrl?: true
   primaryColor?: true
+  emailSettings?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -186,6 +188,7 @@ export type TenantSettingsGroupByOutputType = {
   language: string
   logoUrl: string | null
   primaryColor: string | null
+  emailSettings: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: TenantSettingsCountAggregateOutputType | null
@@ -220,6 +223,7 @@ export type TenantSettingsWhereInput = {
   language?: Prisma.StringFilter<"TenantSettings"> | string
   logoUrl?: Prisma.StringNullableFilter<"TenantSettings"> | string | null
   primaryColor?: Prisma.StringNullableFilter<"TenantSettings"> | string | null
+  emailSettings?: Prisma.JsonNullableFilter<"TenantSettings">
   createdAt?: Prisma.DateTimeFilter<"TenantSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TenantSettings"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -234,6 +238,7 @@ export type TenantSettingsOrderByWithRelationInput = {
   language?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   primaryColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailSettings?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -251,6 +256,7 @@ export type TenantSettingsWhereUniqueInput = Prisma.AtLeast<{
   language?: Prisma.StringFilter<"TenantSettings"> | string
   logoUrl?: Prisma.StringNullableFilter<"TenantSettings"> | string | null
   primaryColor?: Prisma.StringNullableFilter<"TenantSettings"> | string | null
+  emailSettings?: Prisma.JsonNullableFilter<"TenantSettings">
   createdAt?: Prisma.DateTimeFilter<"TenantSettings"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"TenantSettings"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -265,6 +271,7 @@ export type TenantSettingsOrderByWithAggregationInput = {
   language?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   primaryColor?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailSettings?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TenantSettingsCountOrderByAggregateInput
@@ -284,6 +291,7 @@ export type TenantSettingsScalarWhereWithAggregatesInput = {
   language?: Prisma.StringWithAggregatesFilter<"TenantSettings"> | string
   logoUrl?: Prisma.StringNullableWithAggregatesFilter<"TenantSettings"> | string | null
   primaryColor?: Prisma.StringNullableWithAggregatesFilter<"TenantSettings"> | string | null
+  emailSettings?: Prisma.JsonNullableWithAggregatesFilter<"TenantSettings">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"TenantSettings"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"TenantSettings"> | Date | string
 }
@@ -296,6 +304,7 @@ export type TenantSettingsCreateInput = {
   language?: string
   logoUrl?: string | null
   primaryColor?: string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSettingsInput
@@ -310,6 +319,7 @@ export type TenantSettingsUncheckedCreateInput = {
   language?: string
   logoUrl?: string | null
   primaryColor?: string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -322,6 +332,7 @@ export type TenantSettingsUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSettingsNestedInput
@@ -336,6 +347,7 @@ export type TenantSettingsUncheckedUpdateInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -349,6 +361,7 @@ export type TenantSettingsCreateManyInput = {
   language?: string
   logoUrl?: string | null
   primaryColor?: string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -361,6 +374,7 @@ export type TenantSettingsUpdateManyMutationInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -374,6 +388,7 @@ export type TenantSettingsUncheckedUpdateManyInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -392,6 +407,7 @@ export type TenantSettingsCountOrderByAggregateInput = {
   language?: Prisma.SortOrder
   logoUrl?: Prisma.SortOrder
   primaryColor?: Prisma.SortOrder
+  emailSettings?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -462,6 +478,7 @@ export type TenantSettingsCreateWithoutTenantInput = {
   language?: string
   logoUrl?: string | null
   primaryColor?: string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -474,6 +491,7 @@ export type TenantSettingsUncheckedCreateWithoutTenantInput = {
   language?: string
   logoUrl?: string | null
   primaryColor?: string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -502,6 +520,7 @@ export type TenantSettingsUpdateWithoutTenantInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -514,6 +533,7 @@ export type TenantSettingsUncheckedUpdateWithoutTenantInput = {
   language?: Prisma.StringFieldUpdateOperationsInput | string
   logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryColor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailSettings?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -529,6 +549,7 @@ export type TenantSettingsSelect<ExtArgs extends runtime.Types.Extensions.Intern
   language?: boolean
   logoUrl?: boolean
   primaryColor?: boolean
+  emailSettings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -543,6 +564,7 @@ export type TenantSettingsSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   language?: boolean
   logoUrl?: boolean
   primaryColor?: boolean
+  emailSettings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -557,6 +579,7 @@ export type TenantSettingsSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   language?: boolean
   logoUrl?: boolean
   primaryColor?: boolean
+  emailSettings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -571,11 +594,12 @@ export type TenantSettingsSelectScalar = {
   language?: boolean
   logoUrl?: boolean
   primaryColor?: boolean
+  emailSettings?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TenantSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "timezone" | "currency" | "dateFormat" | "language" | "logoUrl" | "primaryColor" | "createdAt" | "updatedAt", ExtArgs["result"]["tenantSettings"]>
+export type TenantSettingsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "timezone" | "currency" | "dateFormat" | "language" | "logoUrl" | "primaryColor" | "emailSettings" | "createdAt" | "updatedAt", ExtArgs["result"]["tenantSettings"]>
 export type TenantSettingsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
@@ -600,6 +624,7 @@ export type $TenantSettingsPayload<ExtArgs extends runtime.Types.Extensions.Inte
     language: string
     logoUrl: string | null
     primaryColor: string | null
+    emailSettings: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["tenantSettings"]>
@@ -1034,6 +1059,7 @@ export interface TenantSettingsFieldRefs {
   readonly language: Prisma.FieldRef<"TenantSettings", 'String'>
   readonly logoUrl: Prisma.FieldRef<"TenantSettings", 'String'>
   readonly primaryColor: Prisma.FieldRef<"TenantSettings", 'String'>
+  readonly emailSettings: Prisma.FieldRef<"TenantSettings", 'Json'>
   readonly createdAt: Prisma.FieldRef<"TenantSettings", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"TenantSettings", 'DateTime'>
 }
