@@ -11,6 +11,11 @@ export class TenantsService {
   constructor(private prisma: PrismaService) {}
 
   async create(createTenantDto: CreateTenantDto) {
+    const domain =
+      createTenantDto.domain && createTenantDto.domain.trim() !== ''
+        ? createTenantDto.domain.trim()
+        : null;
+
     const existingTenant = await this.prisma.tenant.findUnique({
       where: { slug: createTenantDto.slug },
     });
@@ -19,9 +24,9 @@ export class TenantsService {
       throw new ConflictException('Tenant with this slug already exists');
     }
 
-    if (createTenantDto.domain) {
+    if (domain) {
       const existingDomain = await this.prisma.tenant.findUnique({
-         where: { domain: createTenantDto.domain }
+        where: { domain },
       });
       if (existingDomain) throw new ConflictException('Domain is already registered');
     }
@@ -35,7 +40,7 @@ export class TenantsService {
         data: {
           name: createTenantDto.name,
           slug: createTenantDto.slug,
-          domain: createTenantDto.domain,
+          domain: domain,
           status: 'trial',
         },
       });
@@ -129,16 +134,28 @@ export class TenantsService {
   async update(id: string, updateTenantDto: UpdateTenantDto) {
     await this.findOne(id); // verify existence
 
-    if (updateTenantDto.domain) {
+    const domain =
+      updateTenantDto.domain !== undefined
+        ? updateTenantDto.domain && updateTenantDto.domain.trim() !== ''
+          ? updateTenantDto.domain.trim()
+          : null
+        : undefined;
+
+    if (domain) {
       const existing = await this.prisma.tenant.findFirst({
-         where: { domain: updateTenantDto.domain, id: { not: id } }
+        where: { domain, id: { not: id } },
       });
       if (existing) throw new ConflictException('Domain already in use');
     }
 
+    const dataToUpdate: any = { ...updateTenantDto };
+    if (domain !== undefined) {
+      dataToUpdate.domain = domain;
+    }
+
     return this.prisma.tenant.update({
       where: { id },
-      data: updateTenantDto,
+      data: dataToUpdate,
     });
   }
 

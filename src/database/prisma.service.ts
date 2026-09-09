@@ -18,6 +18,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   async onModuleInit() {
     await this.$connect();
+    try {
+      // Fix any existing tenants that have empty string domain instead of NULL
+      await this.tenant.updateMany({
+        where: { domain: '' },
+        data: { domain: null },
+      });
+    } catch (_) {}
   }
 
   async onModuleDestroy() {

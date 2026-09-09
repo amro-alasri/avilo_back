@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateTenantDto {
   @IsString()
@@ -11,7 +12,8 @@ export class CreateTenantDto {
 
   @IsOptional()
   @IsString()
-  domain?: string;
+  @Transform(({ value }) => (typeof value === 'string' && value.trim() !== '' ? value.trim() : null))
+  domain?: string | null;
 
   @IsEmail()
   @IsNotEmpty()

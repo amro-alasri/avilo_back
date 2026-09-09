@@ -1,4 +1,5 @@
 import { IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class UpdateTenantDto {
   @IsOptional()
@@ -7,7 +8,8 @@ export class UpdateTenantDto {
 
   @IsOptional()
   @IsString()
-  domain?: string;
+  @Transform(({ value }) => (typeof value === 'string' && value.trim() !== '' ? value.trim() : null))
+  domain?: string | null;
   
   @IsOptional()
   @IsString()
