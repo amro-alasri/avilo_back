@@ -44,7 +44,9 @@ export const EmployeeStatus = {
   active: 'active',
   on_leave: 'on_leave',
   terminated: 'terminated',
-  probation: 'probation'
+  probation: 'probation',
+  suspended: 'suspended',
+  rejected: 'rejected'
 } as const
 
 export type EmployeeStatus = (typeof EmployeeStatus)[keyof typeof EmployeeStatus]

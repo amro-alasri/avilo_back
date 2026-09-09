@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsEnum, IsDateString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsEnum, IsDateString, IsBoolean } from 'class-validator';
 
 enum EmployeeStatus {
   active = 'active',
@@ -67,4 +67,12 @@ export class CreateEmployeeDto {
   @IsOptional()
   @IsString()
   roleId?: string; // Optional role assignment
+
+  @IsOptional()
+  @IsString()
+  password?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  sendWelcomeEmail?: boolean;
 }

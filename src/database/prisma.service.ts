@@ -26,6 +26,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       });
       // Ensure email_settings JSONB column exists on tenant_settings
       await this.$executeRawUnsafe('ALTER TABLE "tenant_settings" ADD COLUMN IF NOT EXISTS "email_settings" JSONB;');
+      // Ensure EmployeeStatus enum has suspended and rejected values
+      await this.$executeRawUnsafe('ALTER TYPE "EmployeeStatus" ADD VALUE IF NOT EXISTS \'suspended\';');
+      await this.$executeRawUnsafe('ALTER TYPE "EmployeeStatus" ADD VALUE IF NOT EXISTS \'rejected\';');
     } catch (_) {}
   }
 

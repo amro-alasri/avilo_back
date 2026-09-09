@@ -35,6 +35,8 @@ enum EmployeeStatus {
   on_leave
   terminated
   probation
+  suspended
+  rejected
 }
 
 enum AttendanceType {
