@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service.js';
 import { CreateOrganizationDto } from './dto/create-organization.dto.js';
 import { CreateBranchDto } from './dto/create-branch.dto.js';
@@ -30,6 +30,16 @@ export class OrganizationsController {
   @Get('branches')
   findAllBranches(@TenantId() tenantId: string, @Query('orgId') orgId?: string) {
     return this.orgService.findAllBranches(tenantId, orgId);
+  }
+
+  @Patch('branches/:id')
+  updateBranch(@TenantId() tenantId: string, @Param('id') id: string, @Body() dto: any) {
+    return this.orgService.updateBranch(tenantId, id, dto);
+  }
+
+  @Delete('branches/:id')
+  deleteBranch(@TenantId() tenantId: string, @Param('id') id: string) {
+    return this.orgService.deleteBranch(tenantId, id);
   }
 
   @Post('departments')

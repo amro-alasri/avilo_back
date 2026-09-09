@@ -86,4 +86,35 @@ export class OrganizationsService {
       where,
     });
   }
+
+  async updateBranch(tenantId: string, id: string, dto: any) {
+    const branch = await this.prisma.branch.findFirst({
+      where: { id, tenantId },
+    });
+    if (!branch) {
+      throw new NotFoundException('Branch not found');
+    }
+    return this.prisma.branch.update({
+      where: { id },
+      data: {
+        name: dto.name,
+        address: dto.location ?? dto.address,
+        latitude: dto.latitude,
+        longitude: dto.longitude,
+        geofenceRadius: dto.geofenceRadius,
+      },
+    });
+  }
+
+  async deleteBranch(tenantId: string, id: string) {
+    const branch = await this.prisma.branch.findFirst({
+      where: { id, tenantId },
+    });
+    if (!branch) {
+      throw new NotFoundException('Branch not found');
+    }
+    return this.prisma.branch.delete({
+      where: { id },
+    });
+  }
 }
