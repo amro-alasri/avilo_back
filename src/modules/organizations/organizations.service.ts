@@ -3,10 +3,14 @@ import { PrismaService } from '../../database/prisma.service.js';
 import { CreateOrganizationDto } from './dto/create-organization.dto.js';
 import { CreateBranchDto } from './dto/create-branch.dto.js';
 import { CreateDepartmentDto } from './dto/create-department.dto.js';
+import { SubscriptionPolicyService } from '../billing/subscription-policy.service.js';
 
 @Injectable()
 export class OrganizationsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private subscriptionPolicyService: SubscriptionPolicyService,
+  ) {}
 
   // --- Organizations ---
   async createOrg(tenantId: string, dto: CreateOrganizationDto) {
@@ -27,6 +31,9 @@ export class OrganizationsService {
 
   // --- Branches ---
   async createBranch(tenantId: string, dto: CreateBranchDto) {
+    // 1. Enforce Subscription Quota (Maximum Locations / Branches Limit)
+    await this.subscriptionPolicyService.assertCanAddBranch(tenantId);
+
     const org = await this.prisma.organization.findUnique({
       where: { id: dto.orgId },
     });

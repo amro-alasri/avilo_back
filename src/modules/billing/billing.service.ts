@@ -701,10 +701,10 @@ export class BillingService {
         },
       },
       features: {
-        hasPayroll: activeSub ? activeSub.hasPayroll : false,
-        hasLeaves: activeSub ? activeSub.hasLeaves : false,
-        hasVoiceBiometrics: activeSub ? activeSub.hasVoiceBiometrics : false,
-        hasFaceBiometrics: activeSub ? activeSub.hasFaceBiometrics : false,
+        hasPayroll: (activeSub && activeSub.status === 'active') ? Boolean(activeSub.hasPayroll) : false,
+        hasLeaves: (activeSub && activeSub.status === 'active') ? Boolean(activeSub.hasLeaves) : false,
+        hasVoiceBiometrics: (activeSub && activeSub.status === 'active') ? Boolean(activeSub.hasVoiceBiometrics) : false,
+        hasFaceBiometrics: (activeSub && activeSub.status === 'active') ? Boolean(activeSub.hasFaceBiometrics) : false,
       },
       period: {
         remainingDays,

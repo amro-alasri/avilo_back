@@ -9,6 +9,8 @@ import { SettingsService } from '../settings/settings.service.js';
 import * as argon2 from 'argon2';
 import { escapeHtml } from '../../core/utils/security.util.js';
 
+import { SubscriptionPolicyService } from '../billing/subscription-policy.service.js';
+
 @Injectable()
 export class EmployeesService {
   private readonly logger = new Logger(EmployeesService.name);
@@ -17,9 +19,13 @@ export class EmployeesService {
     private prisma: PrismaService,
     private mailService: MailService,
     private settingsService: SettingsService,
+    private subscriptionPolicyService: SubscriptionPolicyService,
   ) {}
 
   async create(tenantId: string, dto: CreateEmployeeDto) {
+    // 1. Enforce Subscription Quota (Maximum Employees Limit)
+    await this.subscriptionPolicyService.assertCanAddEmployee(tenantId);
+
     const existingEmployee = await this.prisma.employee.findUnique({
       where: {
         tenantId_email: {

@@ -4,9 +4,12 @@ import { SalaryStructuresService } from './salary-structures.service';
 import { CreatePayrollRunDto } from './dto/payroll.dto';
 import { CreateSalaryStructureDto } from './dto/salary-structure.dto';
 import { JwtAuthGuard } from '../../core/guards/jwt-auth.guard.js';
+import { RequireFeatureGuard } from '../../core/guards/require-feature.guard.js';
+import { RequireFeature } from '../../core/decorators/require-feature.decorator.js';
 import { PaginationDto } from '../../core/pagination/pagination.dto';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RequireFeatureGuard)
+@RequireFeature('hasPayroll')
 @Controller('payroll')
 export class PayrollController {
   constructor(
