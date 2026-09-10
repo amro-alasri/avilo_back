@@ -33,7 +33,7 @@ export class MobileAuthService {
     if (!employee) throw new UnauthorizedException('Invalid credentials');
     
     if (employee.status === 'pending') {
-      throw new UnauthorizedException('حسابك قيد المراجعة. يرجى الانتظار حتى يتم الموافقة عليه.');
+      throw new UnauthorizedException('Your account is pending review. Please wait for company administrator approval.');
     }
     
     if (employee.status !== 'active') {
@@ -100,7 +100,7 @@ export class MobileAuthService {
     });
 
     return {
-      message: 'تم التسجيل بنجاح. حسابك قيد المراجعة.',
+      message: 'Registered successfully. Your account is pending administrator approval.',
       user: {
         id: employee.id,
         email: employee.email,

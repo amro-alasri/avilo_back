@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
+import { escapeHtml } from '../../core/utils/security.util.js';
 
 interface MsTokenCache {
   token: string;
@@ -71,14 +72,18 @@ export class MailService {
       (!provider && Boolean(config.MS_TENANT_ID && config.MS_CLIENT_ID));
 
     const subject = `[Avilo Test Email] Verification at ${new Date().toLocaleTimeString()}`;
+    const safeProvider = escapeHtml(isMicrosoftGraph ? 'Microsoft Graph API (OAuth 2.0)' : 'Standard SMTP');
+    const safeSender = escapeHtml(isMicrosoftGraph ? config.MS_SENDER_EMAIL : (config.SMTP_FROM || config.SMTP_USER));
+    const safeTimestamp = escapeHtml(new Date().toISOString());
+
     const html = `
       <div style="font-family: sans-serif; padding: 20px; color: #1e293b; max-width: 600px; border: 1px solid #e2e8f0; border-radius: 8px;">
         <h2 style="color: #0284c7; margin-top: 0;">Avilo Email Service Test</h2>
         <p>Congratulations! Your email service configuration in <strong>Avilo</strong> is working properly.</p>
         <div style="background: #f8fafc; padding: 12px; border-radius: 6px; font-size: 13px; margin: 15px 0;">
-          <p style="margin: 4px 0;"><strong>Delivery Provider:</strong> ${isMicrosoftGraph ? 'Microsoft Graph API (OAuth 2.0)' : 'Standard SMTP'}</p>
-          <p style="margin: 4px 0;"><strong>Sender:</strong> ${isMicrosoftGraph ? config.MS_SENDER_EMAIL : (config.SMTP_FROM || config.SMTP_USER)}</p>
-          <p style="margin: 4px 0;"><strong>Timestamp:</strong> ${new Date().toISOString()}</p>
+          <p style="margin: 4px 0;"><strong>Delivery Provider:</strong> ${safeProvider}</p>
+          <p style="margin: 4px 0;"><strong>Sender:</strong> ${safeSender}</p>
+          <p style="margin: 4px 0;"><strong>Timestamp:</strong> ${safeTimestamp}</p>
         </div>
         <p style="color: #64748b; font-size: 12px;">This is an automated test message sent from the Avilo Management Dashboard.</p>
       </div>

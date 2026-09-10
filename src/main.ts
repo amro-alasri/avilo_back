@@ -13,7 +13,14 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, adapter, { bufferLogs: true });
   const logger = new Logger('Bootstrap');
 
+  const configService = app.get(ConfigService);
+  const frontendUrl = configService.get<string>('FRONTEND_URL', 'http://localhost:4444');
+
   await app.register(helmet, {
+    hidePoweredBy: true,
+    frameguard: { action: 'deny' },
+    xssFilter: true,
+    noSniff: true,
     contentSecurityPolicy: {
       directives: {
         defaultSrc: [`'self'`],
@@ -27,17 +34,38 @@ async function bootstrap() {
   await app.register(fastifyMultipart);
 
   app.enableCors({
-    origin: true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (such as mobile apps or internal curl requests)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        frontendUrl,
+        'http://localhost:4444',
+        'http://localhost:3000',
+        'http://127.0.0.1:4444',
+        'http://127.0.0.1:3000',
+      ];
+
+      const isAllowed = allowedOrigins.some((allowed) => allowed && (origin === allowed || origin.startsWith(allowed)));
+      if (isAllowed || process.env.NODE_ENV !== 'production') {
+        return callback(null, true);
+      }
+      return callback(new Error('Blocked by CORS policy'), false);
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
   app.setGlobalPrefix('api');
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidUnknownValues: false,
+    }),
+  );
   app.useGlobalFilters(new GlobalExceptionFilter());
-
-  const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 5500);
 
   const dbUrl = configService.get<string>('DATABASE_URL', '');

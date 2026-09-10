@@ -5,7 +5,8 @@ import { CreateAdminSubscriptionDto, UpdateAdminSubscriptionDto } from './dto/ad
 import { PaginationDto } from '../../core/pagination/pagination.dto';
 import { MailService } from '../mail/mail.service';
 import { SettingsService } from '../settings/settings.service';
-import { format, differenceInDays } from 'date-fns';
+import { format, differenceInDays, addDays } from 'date-fns';
+import { escapeHtml } from '../../core/utils/security.util';
 
 const PLAN_PRICES = {
   free: 0,
@@ -197,6 +198,7 @@ export class BillingService {
     status?: string;
     plan?: string;
   }) {
+    // SuperAdmin subscriptions query - manual management only
     const page = Math.max(1, Number(query.page) || 1);
     const limit = Math.max(1, Math.min(100, Number(query.limit) || 10));
     const skip = (page - 1) * limit;
@@ -439,10 +441,15 @@ export class BillingService {
       const endDateStr = sub.endDate ? format(new Date(sub.endDate), 'yyyy-MM-dd') : 'Open-ended';
       const daysTotal = sub.endDate ? Math.max(1, differenceInDays(new Date(sub.endDate), new Date(sub.startDate))) : 365;
 
-      const planName = sub.plan.toUpperCase();
+      const safePlanName = escapeHtml(sub.plan ? sub.plan.toUpperCase() : 'FREE');
+      const safeTenantName = escapeHtml(tenant.name);
+      const safeSlug = escapeHtml(tenant.slug);
+      const safeDomain = tenant.domain ? escapeHtml(tenant.domain) : null;
       const adminUser = tenant.users[0];
+      const safeAdminEmail = escapeHtml(adminUser?.email || recipientEmail);
+      const safeBillingCycle = escapeHtml(sub.billingCycle || 'monthly');
 
-      const subject = `🎉 Subscription Activated for ${tenant.name} - Avilo Platform`;
+      const subject = `🎉 Subscription Activated for ${safeTenantName} - Avilo Platform`;
 
       const html = `
         <!DOCTYPE html>
@@ -471,7 +478,7 @@ export class BillingService {
             <div class="header">
               <span class="badge">Avilo Cloud Platform</span>
               <h1 style="margin: 0; font-size: 24px; font-weight: 800;">Subscription Activated Successfully 🎉</h1>
-              <p style="margin: 8px 0 0 0; color: #94a3b8; font-size: 14px;">Welcome <strong>${tenant.name}</strong> to the Avilo Platform</p>
+              <p style="margin: 8px 0 0 0; color: #94a3b8; font-size: 14px;">Welcome <strong>${safeTenantName}</strong> to the Avilo Platform</p>
             </div>
 
             <div class="content">
@@ -484,7 +491,7 @@ export class BillingService {
               <table class="info-grid">
                 <tr>
                   <td class="info-label">Plan Tier:</td>
-                  <td class="info-value"><strong>${planName}</strong></td>
+                  <td class="info-value"><strong>${safePlanName}</strong></td>
                 </tr>
                 <tr>
                   <td class="info-label">Start Date:</td>
@@ -500,7 +507,7 @@ export class BillingService {
                 </tr>
                 <tr>
                   <td class="info-label">Billing Cycle:</td>
-                  <td class="info-value" style="text-transform: capitalize;">${sub.billingCycle || 'Monthly'}</td>
+                  <td class="info-value" style="text-transform: capitalize;">${safeBillingCycle}</td>
                 </tr>
               </table>
 
@@ -510,11 +517,11 @@ export class BillingService {
                 <table style="width: 100%; border-collapse: collapse;">
                   <tr>
                     <td style="padding: 6px 0; font-size: 13px; color: #475569;">👥 Maximum Employee Seats:</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: #0f172a;">${sub.maxEmployees} employees</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: #0f172a;">${Number(sub.maxEmployees) || 0} employees</td>
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; font-size: 13px; color: #475569;">📍 Maximum Branches / Locations:</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: #0f172a;">${sub.maxLocations} locations</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: #0f172a;">${Number(sub.maxLocations) || 0} locations</td>
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; font-size: 13px; color: #475569;">💵 Payroll Processing System:</td>
@@ -549,16 +556,16 @@ export class BillingService {
                 <table style="width: 100%; border-collapse: collapse;">
                   <tr>
                     <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">Workspace Slug (Company Code):</td>
-                    <td style="padding: 4px 0; font-size: 14px; font-family: monospace; font-weight: 700; color: #1e3a8a;">${tenant.slug}</td>
+                    <td style="padding: 4px 0; font-size: 14px; font-family: monospace; font-weight: 700; color: #1e3a8a;">${safeSlug}</td>
                   </tr>
                   <tr>
                     <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">Administrator Email:</td>
-                    <td style="padding: 4px 0; font-size: 13px; font-family: monospace; color: #1e3a8a;">${adminUser?.email || recipientEmail}</td>
+                    <td style="padding: 4px 0; font-size: 13px; font-family: monospace; color: #1e3a8a;">${safeAdminEmail}</td>
                   </tr>
-                  ${tenant.domain ? `
+                  ${safeDomain ? `
                   <tr>
                     <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">Custom Domain:</td>
-                    <td style="padding: 4px 0; font-size: 13px; color: #1e3a8a;">${tenant.domain}</td>
+                    <td style="padding: 4px 0; font-size: 13px; color: #1e3a8a;">${safeDomain}</td>
                   </tr>
                   ` : ''}
                 </table>
@@ -567,7 +574,7 @@ export class BillingService {
                   <strong>How to access your company dashboard:</strong>
                   <ol style="margin: 4px 0 0 0; padding-left: 20px;">
                     <li>Click the button below to navigate to the login portal.</li>
-                    <li>Enter your Company Code: <strong>${tenant.slug}</strong></li>
+                    <li>Enter your Company Code: <strong>${safeSlug}</strong></li>
                     <li>Enter your administrator email and credentials.</li>
                   </ol>
                 </div>
@@ -626,7 +633,22 @@ export class BillingService {
 
     if (!tenant) throw new NotFoundException('Tenant not found');
 
-    const activeSub = tenant.subscriptions[0] || null;
+    let activeSub: any = tenant.subscriptions[0] || null;
+
+    // If no active subscription found, check if tenant has any subscription at all
+    if (!activeSub) {
+      const latestSub = await this.prisma.subscription.findFirst({
+        where: { tenantId },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      if (latestSub) {
+        activeSub = latestSub;
+      } else {
+        // Tenant has no subscription assigned yet (managed manually by SuperAdmin)
+        activeSub = null;
+      }
+    }
 
     // Count current active employees (exclude terminated)
     const activeEmployeesCount = await this.prisma.employee.count({
@@ -643,7 +665,7 @@ export class BillingService {
 
     const now = new Date();
     let remainingDays = 0;
-    let totalDays = 30;
+    let totalDays = 0;
     let isExpiringSoon = false;
 
     if (activeSub && activeSub.endDate) {
@@ -652,8 +674,8 @@ export class BillingService {
       isExpiringSoon = remainingDays <= 14;
     }
 
-    const maxEmployees = activeSub?.maxEmployees ?? 10;
-    const maxLocations = activeSub?.maxLocations ?? 1;
+    const maxEmployees = activeSub?.maxEmployees ?? 0;
+    const maxLocations = activeSub?.maxLocations ?? 0;
 
     return {
       tenant: {
@@ -668,27 +690,27 @@ export class BillingService {
         employees: {
           used: activeEmployeesCount,
           max: maxEmployees,
-          percent: Math.min(100, Math.round((activeEmployeesCount / maxEmployees) * 100)),
-          isExceeded: activeEmployeesCount > maxEmployees,
+          percent: maxEmployees > 0 ? Math.min(100, Math.round((activeEmployeesCount / maxEmployees) * 100)) : 0,
+          isExceeded: maxEmployees > 0 ? activeEmployeesCount > maxEmployees : false,
         },
         locations: {
           used: branchesCount,
           max: maxLocations,
-          percent: Math.min(100, Math.round((branchesCount / maxLocations) * 100)),
-          isExceeded: branchesCount > maxLocations,
+          percent: maxLocations > 0 ? Math.min(100, Math.round((branchesCount / maxLocations) * 100)) : 0,
+          isExceeded: maxLocations > 0 ? branchesCount > maxLocations : false,
         },
       },
       features: {
-        hasPayroll: activeSub ? activeSub.hasPayroll : true,
-        hasLeaves: activeSub ? activeSub.hasLeaves : true,
+        hasPayroll: activeSub ? activeSub.hasPayroll : false,
+        hasLeaves: activeSub ? activeSub.hasLeaves : false,
         hasVoiceBiometrics: activeSub ? activeSub.hasVoiceBiometrics : false,
         hasFaceBiometrics: activeSub ? activeSub.hasFaceBiometrics : false,
       },
       period: {
         remainingDays,
-        totalDays,
-        percentRemaining: totalDays > 0 ? Math.min(100, Math.round((remainingDays / totalDays) * 100)) : 100,
-        isExpiringSoon,
+        totalDays: activeSub ? totalDays : 0,
+        percentRemaining: (activeSub && totalDays > 0) ? Math.min(100, Math.round((remainingDays / totalDays) * 100)) : 0,
+        isExpiringSoon: activeSub ? isExpiringSoon : false,
       },
     };
   }

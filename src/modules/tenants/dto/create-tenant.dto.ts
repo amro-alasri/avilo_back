@@ -23,20 +23,33 @@ export class CreateTenantDto {
   @IsString()
   contactPhone?: string;
 
-  @IsEmail()
-  @IsNotEmpty()
-  adminEmail: string;
-
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   @MinLength(6)
-  adminPassword: string;
+  defaultPassword?: string;
 
-  @IsString()
-  @IsNotEmpty()
-  adminFirstName: string;
+  // Optional legacy fields for backwards compatibility
+  @IsOptional()
+  @IsEmail()
+  adminEmail?: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  adminLastName: string;
+  @MinLength(6)
+  adminPassword?: string;
+
+  @IsOptional()
+  @IsString()
+  adminFirstName?: string;
+
+  @IsOptional()
+  @IsString()
+  adminLastName?: string;
+
+  @IsOptional()
+  sendWelcomeEmail?: boolean;
+
+  @IsOptional()
+  @IsString()
+  plan?: string;
 }

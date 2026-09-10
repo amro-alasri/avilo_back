@@ -7,6 +7,7 @@ import { PaginatedResponse } from '../../core/pagination/paginated-response.js';
 import { MailService } from '../mail/mail.service.js';
 import { SettingsService } from '../settings/settings.service.js';
 import * as argon2 from 'argon2';
+import { escapeHtml } from '../../core/utils/security.util.js';
 
 @Injectable()
 export class EmployeesService {
@@ -70,22 +71,27 @@ export class EmployeesService {
           select: { name: true, slug: true },
         });
 
-        const companyName = tenant?.name || 'Avilo Company';
-        const companySlug = tenant?.slug || '';
+        const safeCompanyName = escapeHtml(tenant?.name || 'Avilo Company');
+        const safeCompanySlug = escapeHtml(tenant?.slug || '');
+        const safeFirstName = escapeHtml(dto.firstName);
+        const safeLastName = escapeHtml(dto.lastName);
+        const safeEmail = escapeHtml(dto.email);
+        const safeInitialPassword = escapeHtml(initialPassword);
+        const safeEmployeeNumber = escapeHtml(dto.employeeNumber);
         const emailConfig = await this.settingsService.getRawEmailConfig(tenantId);
 
-        const subject = `Welcome to ${companyName} - Login Credentials for Avilo Mobile App`;
+        const subject = `Welcome to ${safeCompanyName} - Login Credentials for Avilo Mobile App`;
         const html = `
           <div dir="ltr" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 620px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; color: #1e293b;">
             <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 24px; text-align: center; color: #ffffff;">
-              <h1 style="margin: 0; font-size: 22px; font-weight: 700;">${companyName}</h1>
+              <h1 style="margin: 0; font-size: 22px; font-weight: 700;">${safeCompanyName}</h1>
               <p style="margin: 6px 0 0 0; font-size: 13px; opacity: 0.9;">Avilo Workforce Management</p>
             </div>
             
             <div style="padding: 24px 28px;">
-              <h2 style="font-size: 18px; color: #0f172a; margin-top: 0;">Welcome, ${dto.firstName} ${dto.lastName} 👋</h2>
+              <h2 style="font-size: 18px; color: #0f172a; margin-top: 0;">Welcome, ${safeFirstName} ${safeLastName} 👋</h2>
               <p style="font-size: 14px; line-height: 1.6; color: #334155;">
-                We are pleased to inform you that your employee account has been activated for <strong>${companyName}</strong>. You can now sign in to the <strong>Avilo Mobile App</strong> using the login credentials below:
+                We are pleased to inform you that your employee account has been activated for <strong>${safeCompanyName}</strong>. You can now sign in to the <strong>Avilo Mobile App</strong> using the login credentials below:
               </p>
 
               <!-- Credentials Box -->
@@ -95,25 +101,25 @@ export class EmployeesService {
                     <td style="padding: 6px 0; color: #64748b; font-weight: 600; width: 140px;">Company Code:</td>
                     <td style="padding: 6px 0;">
                       <span style="font-family: monospace; font-size: 15px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 6px; border: 1px solid #bae6fd;">
-                        ${companySlug}
+                        ${safeCompanySlug}
                       </span>
                     </td>
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; color: #64748b; font-weight: 600;">Email:</td>
-                    <td style="padding: 6px 0; font-family: monospace; font-weight: 600; color: #0f172a;">${dto.email}</td>
+                    <td style="padding: 6px 0; font-family: monospace; font-weight: 600; color: #0f172a;">${safeEmail}</td>
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; color: #64748b; font-weight: 600;">Temporary Password:</td>
                     <td style="padding: 6px 0;">
                       <span style="font-family: monospace; font-size: 15px; font-weight: 700; background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 6px; border: 1px solid #fde68a;">
-                        ${initialPassword}
+                        ${safeInitialPassword}
                       </span>
                     </td>
                   </tr>
                   <tr>
                     <td style="padding: 6px 0; color: #64748b; font-weight: 600;">Employee Number:</td>
-                    <td style="padding: 6px 0; font-family: monospace; color: #334155;">${dto.employeeNumber}</td>
+                    <td style="padding: 6px 0; font-family: monospace; color: #334155;">${safeEmployeeNumber}</td>
                   </tr>
                 </table>
               </div>
@@ -123,7 +129,7 @@ export class EmployeesService {
                 <h4 style="margin: 0 0 8px 0; font-size: 13px; color: #1e40af;">How to Sign In to the Mobile App:</h4>
                 <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #1e3a8a; line-height: 1.6;">
                   <li>Open the <strong>Avilo</strong> app on your mobile device.</li>
-                  <li>Enter your Company Code: <strong>${companySlug}</strong></li>
+                  <li>Enter your Company Code: <strong>${safeCompanySlug}</strong></li>
                   <li>Enter your email and temporary password, then tap Sign In.</li>
                 </ol>
               </div>
