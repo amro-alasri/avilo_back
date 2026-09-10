@@ -74,25 +74,25 @@ export class EmployeesService {
         const companySlug = tenant?.slug || '';
         const emailConfig = await this.settingsService.getRawEmailConfig(tenantId);
 
-        const subject = `مرحباً بك في ${companyName} - بيانات الدخول لتطبيق Avilo`;
+        const subject = `Welcome to ${companyName} - Login Credentials for Avilo Mobile App`;
         const html = `
-          <div dir="rtl" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 620px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; color: #1e293b;">
+          <div dir="ltr" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 620px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; color: #1e293b;">
             <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 24px; text-align: center; color: #ffffff;">
               <h1 style="margin: 0; font-size: 22px; font-weight: 700;">${companyName}</h1>
-              <p style="margin: 6px 0 0 0; font-size: 13px; opacity: 0.9;">نظام Avilo لإدارة شؤون الموظفين</p>
+              <p style="margin: 6px 0 0 0; font-size: 13px; opacity: 0.9;">Avilo Workforce Management</p>
             </div>
             
             <div style="padding: 24px 28px;">
-              <h2 style="font-size: 18px; color: #0f172a; margin-top: 0;">أهلاً بك، ${dto.firstName} ${dto.lastName} 👋</h2>
+              <h2 style="font-size: 18px; color: #0f172a; margin-top: 0;">Welcome, ${dto.firstName} ${dto.lastName} 👋</h2>
               <p style="font-size: 14px; line-height: 1.6; color: #334155;">
-                يسعدنا إعلامك بأنه تم إنشاء وتفعيل حسابك كموظف في <strong>${companyName}</strong>. يمكنك الآن تسجيل الدخول عبر تطبيق الهاتف الذكي (<strong>Avilo Mobile App</strong>) باستخدام بيانات الاعتماد الموضحة أدناه:
+                We are pleased to inform you that your employee account has been activated for <strong>${companyName}</strong>. You can now sign in to the <strong>Avilo Mobile App</strong> using the login credentials below:
               </p>
 
               <!-- Credentials Box -->
               <div style="background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 10px; padding: 18px; margin: 20px 0;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                   <tr>
-                    <td style="padding: 6px 0; color: #64748b; font-weight: 600; width: 140px;">كود الشركة (Company Code):</td>
+                    <td style="padding: 6px 0; color: #64748b; font-weight: 600; width: 140px;">Company Code:</td>
                     <td style="padding: 6px 0;">
                       <span style="font-family: monospace; font-size: 15px; font-weight: 700; background: #e0f2fe; color: #0369a1; padding: 3px 8px; border-radius: 6px; border: 1px solid #bae6fd;">
                         ${companySlug}
@@ -100,11 +100,11 @@ export class EmployeesService {
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; color: #64748b; font-weight: 600;">البريد الإلكتروني (Email):</td>
+                    <td style="padding: 6px 0; color: #64748b; font-weight: 600;">Email:</td>
                     <td style="padding: 6px 0; font-family: monospace; font-weight: 600; color: #0f172a;">${dto.email}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; color: #64748b; font-weight: 600;">كلمة المرور المؤقتة:</td>
+                    <td style="padding: 6px 0; color: #64748b; font-weight: 600;">Temporary Password:</td>
                     <td style="padding: 6px 0;">
                       <span style="font-family: monospace; font-size: 15px; font-weight: 700; background: #fef3c7; color: #92400e; padding: 3px 8px; border-radius: 6px; border: 1px solid #fde68a;">
                         ${initialPassword}
@@ -112,7 +112,7 @@ export class EmployeesService {
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; color: #64748b; font-weight: 600;">رقم الموظف الوظيفي:</td>
+                    <td style="padding: 6px 0; color: #64748b; font-weight: 600;">Employee Number:</td>
                     <td style="padding: 6px 0; font-family: monospace; color: #334155;">${dto.employeeNumber}</td>
                   </tr>
                 </table>
@@ -120,22 +120,22 @@ export class EmployeesService {
 
               <!-- Steps to Log In -->
               <div style="background-color: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px; margin-bottom: 20px;">
-                <h4 style="margin: 0 0 8px 0; font-size: 13px; color: #1e40af;">خطوات تسجيل الدخول للتطبيق:</h4>
-                <ol style="margin: 0; padding-right: 20px; font-size: 13px; color: #1e3a8a; line-height: 1.6;">
-                  <li>افتح تطبيق <strong>Avilo</strong> على هاتفك الذكي.</li>
-                  <li>أدخل كود الشركة: <strong>${companySlug}</strong></li>
-                  <li>أدخل بريدك الإلكتروني وكلمة المرور المؤقتة واضغط تسجيل الدخول.</li>
+                <h4 style="margin: 0 0 8px 0; font-size: 13px; color: #1e40af;">How to Sign In to the Mobile App:</h4>
+                <ol style="margin: 0; padding-left: 20px; font-size: 13px; color: #1e3a8a; line-height: 1.6;">
+                  <li>Open the <strong>Avilo</strong> app on your mobile device.</li>
+                  <li>Enter your Company Code: <strong>${companySlug}</strong></li>
+                  <li>Enter your email and temporary password, then tap Sign In.</li>
                 </ol>
               </div>
 
               <!-- Security Notice -->
               <div style="background-color: #fffbeb; border: 1px solid #fef3c7; border-radius: 8px; padding: 12px; margin-bottom: 16px; font-size: 12px; color: #92400e; line-height: 1.5;">
-                🔒 <strong>تنبيه أمني:</strong> هذه البيانات مخصصة حصرياً لتطبيق الهاتف الذكي لتسجيل الحضور، تقديم الإجازات، ومتابعة قسائم الرواتب. هذا الحساب لا يملك صلاحية الدخول إلى لوحة تحكم الويب الإدارية. يُنصح بتغيير كلمة المرور فور أول تسجيل دخول لضمان أمان حسابك.
+                🔒 <strong>Security Notice:</strong> These credentials are exclusively for the Avilo Mobile App to record attendance, submit leave requests, and view payslips. This account does not have access to the administrative web dashboard. You are advised to change your password immediately upon your first login.
               </div>
             </div>
 
             <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0;">
-              هذه الرسالة تم إنشاؤها وإرسالها تلقائياً عبر منصة Avilo HR.
+              This notification was generated automatically by the Avilo HR platform.
             </div>
           </div>
         `;

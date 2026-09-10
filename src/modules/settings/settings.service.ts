@@ -28,6 +28,8 @@ export class SettingsService {
 
   /**
    * Retrieves raw decrypted email configuration for sending or testing.
+   * If tenant has not configured custom email settings, it falls back to the system
+   * tenant (SuperAdmin) configuration, and finally to process.env.
    */
   async getRawEmailConfig(tenantId: string): Promise<EmailConfig> {
     const settings = await this.prisma.tenantSettings.findUnique({
@@ -35,7 +37,35 @@ export class SettingsService {
       select: { emailSettings: true },
     });
 
-    const stored: any = (settings?.emailSettings as any) || {};
+    let stored: any = (settings?.emailSettings as any) || {};
+
+    // Check if this tenant has custom credentials defined
+    const hasCustomConfig = Boolean(
+      (stored.EMAIL_PROVIDER === 'smtp' && (stored.SMTP_HOST || stored.SMTP_USER)) ||
+      (stored.EMAIL_PROVIDER === 'microsoft_graph' && (stored.MS_CLIENT_ID || stored.MS_TENANT_ID)) ||
+      stored.MS_CLIENT_ID ||
+      stored.SMTP_HOST
+    );
+
+    // If tenant does not have their own credentials, fallback to the 'system' tenant
+    if (!hasCustomConfig) {
+      try {
+        const systemTenant = await this.prisma.tenant.findUnique({
+          where: { slug: 'system' },
+          select: { id: true, settings: { select: { emailSettings: true } } },
+        });
+
+        if (systemTenant && systemTenant.id !== tenantId && systemTenant.settings?.emailSettings) {
+          const sysStored: any = systemTenant.settings.emailSettings;
+          if (sysStored.MS_CLIENT_ID || sysStored.SMTP_HOST || sysStored.MS_TENANT_ID) {
+            stored = sysStored;
+          }
+        }
+      } catch (err: any) {
+        this.logger.warn(`Could not load system tenant fallback email settings: ${err.message}`);
+      }
+    }
+
     const decrypted: EmailConfig = { ...stored };
 
     if (stored.MS_CLIENT_SECRET) {

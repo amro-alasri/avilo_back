@@ -4,6 +4,7 @@ import { CreateSubscriptionDto } from './dto/billing.dto';
 import { CreateAdminSubscriptionDto, UpdateAdminSubscriptionDto } from './dto/admin-subscription.dto';
 import { PaginationDto } from '../../core/pagination/pagination.dto';
 import { MailService } from '../mail/mail.service';
+import { SettingsService } from '../settings/settings.service';
 import { format, differenceInDays } from 'date-fns';
 
 const PLAN_PRICES = {
@@ -20,6 +21,7 @@ export class BillingService {
   constructor(
     private prisma: PrismaService,
     private mailService: MailService,
+    private settingsService: SettingsService,
   ) {}
 
   // =========================================================================
@@ -36,11 +38,11 @@ export class BillingService {
     const end = new Date(endDateStr);
 
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      throw new BadRequestException('صيغة التواريخ غير صحيحة / Invalid date format');
+      throw new BadRequestException('Invalid date format');
     }
 
     if (end <= start) {
-      throw new BadRequestException('تاريخ انتهاء الاشتراك يجب أن يكون بعد تاريخ البدء / End date must be strictly after start date');
+      throw new BadRequestException('Subscription end date must be strictly after the start date');
     }
 
     const overlapping = await this.prisma.subscription.findFirst({
@@ -65,9 +67,9 @@ export class BillingService {
 
     if (overlapping) {
       const existingStart = format(new Date(overlapping.startDate), 'yyyy-MM-dd');
-      const existingEnd = overlapping.endDate ? format(new Date(overlapping.endDate), 'yyyy-MM-dd') : 'مفتوح (Open-ended)';
+      const existingEnd = overlapping.endDate ? format(new Date(overlapping.endDate), 'yyyy-MM-dd') : 'Open-ended';
       throw new ConflictException(
-        `تتعارض فترة الاشتراك المحددة (${format(start, 'yyyy-MM-dd')} إلى ${format(end, 'yyyy-MM-dd')}) مع اشتراك نشط حالياً للشركة للفترة من (${existingStart} إلى ${existingEnd}) لخطة (${overlapping.plan}). يرجى اختيار فترة غير متقاطعة.`
+        `The selected subscription period (${format(start, 'yyyy-MM-dd')} to ${format(end, 'yyyy-MM-dd')}) overlaps with an active subscription (${existingStart} to ${existingEnd}) for plan "${overlapping.plan}". Please select a non-overlapping date range.`
       );
     }
   }
@@ -90,7 +92,7 @@ export class BillingService {
     });
 
     if (!tenant) {
-      throw new NotFoundException('الشركة غير موجودة / Tenant not found');
+      throw new NotFoundException('Company tenant not found');
     }
 
     // 1. Strict overlap check
@@ -393,9 +395,9 @@ export class BillingService {
     const sub = await this.findAdminSubscriptionById(id);
     const emailRes = await this.dispatchSubscriptionEmail(sub);
     if (!emailRes.success) {
-      throw new BadRequestException(`فشل إرسال البريد: ${emailRes.error}`);
+      throw new BadRequestException(`Failed to dispatch email: ${emailRes.error}`);
     }
-    return { success: true, message: 'تم إرسال بريد تفاصيل الاشتراك بنجاح' };
+    return { success: true, message: 'Subscription details email dispatched successfully' };
   }
 
   // =========================================================================
@@ -429,26 +431,26 @@ export class BillingService {
         return { success: false, error: 'No contact email or admin account found for this company' };
       }
 
-      const emailConfig = (tenant.settings?.emailSettings as any) || undefined;
+      const emailConfig = await this.settingsService.getRawEmailConfig(tenant.id);
       const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4444';
       const loginUrl = `${frontendUrl}/login`;
 
       const startDateStr = format(new Date(sub.startDate), 'yyyy-MM-dd');
-      const endDateStr = sub.endDate ? format(new Date(sub.endDate), 'yyyy-MM-dd') : 'دائم / Open-ended';
+      const endDateStr = sub.endDate ? format(new Date(sub.endDate), 'yyyy-MM-dd') : 'Open-ended';
       const daysTotal = sub.endDate ? Math.max(1, differenceInDays(new Date(sub.endDate), new Date(sub.startDate))) : 365;
 
       const planName = sub.plan.toUpperCase();
       const adminUser = tenant.users[0];
 
-      const subject = `🎉 تفعيل اشتراك شركة ${tenant.name} - منصة Avilo HR`;
+      const subject = `🎉 Subscription Activated for ${tenant.name} - Avilo Platform`;
 
       const html = `
         <!DOCTYPE html>
-        <html dir="rtl" lang="ar">
+        <html dir="ltr" lang="en">
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 20px; color: #1e293b; }
             .container { max-width: 620px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
             .header { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
             .badge { display: inline-block; padding: 4px 12px; background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; border-radius: 9999px; color: #93c5fd; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 8px; }
@@ -459,8 +461,6 @@ export class BillingService {
             .info-label { color: #64748b; font-weight: 600; width: 40%; }
             .info-value { color: #0f172a; font-weight: 500; }
             .features-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 20px; }
-            .feature-row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 1px dashed #e2e8f0; }
-            .feature-row:last-child { border-bottom: none; }
             .login-card { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border: 1px solid #bfdbfe; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
             .btn { display: inline-block; background-color: #2563eb; color: #ffffff !important; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 14px; text-align: center; margin-top: 12px; }
             .footer { background-color: #f1f5f9; padding: 18px 24px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; }
@@ -470,121 +470,121 @@ export class BillingService {
           <div class="container">
             <div class="header">
               <span class="badge">Avilo Cloud Platform</span>
-              <h1 style="margin: 0; font-size: 24px; font-weight: 800;">تم تفعيل اشتراككم بنجاح 🎉</h1>
-              <p style="margin: 8px 0 0 0; color: #94a3b8; font-size: 14px;">مرحباً بكم بشركة <strong>${tenant.name}</strong> في منصة Avilo</p>
+              <h1 style="margin: 0; font-size: 24px; font-weight: 800;">Subscription Activated Successfully 🎉</h1>
+              <p style="margin: 8px 0 0 0; color: #94a3b8; font-size: 14px;">Welcome <strong>${tenant.name}</strong> to the Avilo Platform</p>
             </div>
 
             <div class="content">
               <p style="font-size: 14px; line-height: 1.6; color: #334155; margin-top: 0;">
-                يسعدنا إبلاغكم بأنه تم إعداد وتفعيل مساحة العمل الخاصة بشركتكم وتخصيص باقة الاشتراك المعتمدة بكافة الميزات والحصص التراخيصية المطلوبة.
+                We are pleased to inform you that your company workspace has been provisioned and your approved subscription plan has been activated with all authorized entitlements and quotas.
               </p>
 
-              <!-- تفاصيل الاشتراك -->
-              <div class="section-title">📋 تفاصيل الاشتراك والفترة الزمنية</div>
+              <!-- Subscription Details -->
+              <div class="section-title">📋 Subscription & Validity Details</div>
               <table class="info-grid">
                 <tr>
-                  <td class="info-label">اسم الباقة المعتمدة:</td>
+                  <td class="info-label">Plan Tier:</td>
                   <td class="info-value"><strong>${planName}</strong></td>
                 </tr>
                 <tr>
-                  <td class="info-label">تاريخ البداية:</td>
+                  <td class="info-label">Start Date:</td>
                   <td class="info-value">${startDateStr}</td>
                 </tr>
                 <tr>
-                  <td class="info-label">تاريخ الانتهاء:</td>
+                  <td class="info-label">End Date:</td>
                   <td class="info-value">${endDateStr}</td>
                 </tr>
                 <tr>
-                  <td class="info-label">إجمالي مدة الصلاحية:</td>
-                  <td class="info-value">${daysTotal} يوم</td>
+                  <td class="info-label">Validity Period:</td>
+                  <td class="info-value">${daysTotal} days</td>
                 </tr>
                 <tr>
-                  <td class="info-label">دورة الفوترة:</td>
-                  <td class="info-value">${sub.billingCycle === 'yearly' ? 'سنوي' : 'شهري'}</td>
+                  <td class="info-label">Billing Cycle:</td>
+                  <td class="info-value" style="text-transform: capitalize;">${sub.billingCycle || 'Monthly'}</td>
                 </tr>
               </table>
 
-              <!-- الميزات والحصص المتاحة -->
-              <div class="section-title">⚡ الميزات والحصص المشمولة بالاشتراك</div>
+              <!-- Features & Quotas Included -->
+              <div class="section-title">⚡ Included Quotas & Entitlements</div>
               <div class="features-box">
                 <table style="width: 100%; border-collapse: collapse;">
                   <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">👥 الحد الأقصى للموظفين:</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: left; color: #0f172a;">${sub.maxEmployees} موظف</td>
+                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">👥 Maximum Employee Seats:</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: #0f172a;">${sub.maxEmployees} employees</td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">📍 الحد الأقصى للفروع والمواقع:</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: left; color: #0f172a;">${sub.maxLocations} فرع</td>
+                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">📍 Maximum Branches / Locations:</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: #0f172a;">${sub.maxLocations} locations</td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">💵 نظام مسير الرواتب والأجور (Payroll):</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: left; color: ${sub.hasPayroll ? '#16a34a' : '#dc2626'};">
-                      ${sub.hasPayroll ? 'مفعل ومشمول ✅' : 'غير مشمول ❌'}
+                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">💵 Payroll Processing System:</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: ${sub.hasPayroll ? '#16a34a' : '#dc2626'};">
+                      ${sub.hasPayroll ? 'Included & Enabled ✅' : 'Not Included ❌'}
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">📅 نظام إدارة الإجازات والطلبات:</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: left; color: ${sub.hasLeaves ? '#16a34a' : '#dc2626'};">
-                      ${sub.hasLeaves ? 'مفعل ومشمول ✅' : 'غير مشمول ❌'}
+                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">📅 Leave & Time-Off Management:</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: ${sub.hasLeaves ? '#16a34a' : '#dc2626'};">
+                      ${sub.hasLeaves ? 'Included & Enabled ✅' : 'Not Included ❌'}
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">🎙️ التحقق عبر بصمة الصوت (Voice Biometrics):</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: left; color: ${sub.hasVoiceBiometrics ? '#16a34a' : '#dc2626'};">
-                      ${sub.hasVoiceBiometrics ? 'مفعل ومشمول ✅' : 'غير مشمول ❌'}
+                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">🎙️ Voice Biometrics Verification:</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: ${sub.hasVoiceBiometrics ? '#16a34a' : '#dc2626'};">
+                      ${sub.hasVoiceBiometrics ? 'Included & Enabled ✅' : 'Not Included ❌'}
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">👤 التحقق عبر بصمة الوجه (Face Biometrics):</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: left; color: ${sub.hasFaceBiometrics ? '#16a34a' : '#dc2626'};">
-                      ${sub.hasFaceBiometrics ? 'مفعل ومشمول ✅' : 'غير مشمول ❌'}
+                    <td style="padding: 6px 0; font-size: 13px; color: #475569;">👤 Face Biometrics Verification:</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 700; text-align: right; color: ${sub.hasFaceBiometrics ? '#16a34a' : '#dc2626'};">
+                      ${sub.hasFaceBiometrics ? 'Included & Enabled ✅' : 'Not Included ❌'}
                     </td>
                   </tr>
                 </table>
               </div>
 
-              <!-- آلية وبيانات الدخول للنظام -->
-              <div class="section-title">🔑 بيانات وآلية الدخول للنظام</div>
+              <!-- Workspace Credentials & Login -->
+              <div class="section-title">🔑 Workspace Access & Login</div>
               <div class="login-card">
                 <table style="width: 100%; border-collapse: collapse;">
                   <tr>
-                    <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">معرف الشركة (Workspace Slug):</td>
+                    <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">Workspace Slug (Company Code):</td>
                     <td style="padding: 4px 0; font-size: 14px; font-family: monospace; font-weight: 700; color: #1e3a8a;">${tenant.slug}</td>
                   </tr>
                   <tr>
-                    <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">البريد الإلكتروني الإداري:</td>
+                    <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">Administrator Email:</td>
                     <td style="padding: 4px 0; font-size: 13px; font-family: monospace; color: #1e3a8a;">${adminUser?.email || recipientEmail}</td>
                   </tr>
                   ${tenant.domain ? `
                   <tr>
-                    <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">النطاق المخصص:</td>
+                    <td style="padding: 4px 0; font-size: 13px; color: #1e40af; font-weight: 600;">Custom Domain:</td>
                     <td style="padding: 4px 0; font-size: 13px; color: #1e3a8a;">${tenant.domain}</td>
                   </tr>
                   ` : ''}
                 </table>
 
                 <div style="margin-top: 14px; font-size: 13px; color: #1e3a8a; line-height: 1.6;">
-                  <strong>خطوات تسجيل الدخول للوحة التحكم:</strong>
-                  <ol style="margin: 4px 0 0 0; padding-right: 20px;">
-                    <li>انقر على الزر أدناه للانتقال إلى بوابة الدخول.</li>
-                    <li>أدخل معرف الشركة: <strong>${tenant.slug}</strong></li>
-                    <li>أدخل البريد الإلكتروني وكلمة المرور الخاصة بمسؤول النظام.</li>
+                  <strong>How to access your company dashboard:</strong>
+                  <ol style="margin: 4px 0 0 0; padding-left: 20px;">
+                    <li>Click the button below to navigate to the login portal.</li>
+                    <li>Enter your Company Code: <strong>${tenant.slug}</strong></li>
+                    <li>Enter your administrator email and credentials.</li>
                   </ol>
                 </div>
 
                 <div style="text-align: center; margin-top: 16px;">
-                  <a href="${loginUrl}" class="btn" target="_blank">الانتقال إلى لوحة تحكم الشركة</a>
+                  <a href="${loginUrl}" class="btn" target="_blank">Access Company Dashboard</a>
                 </div>
               </div>
 
               <div style="background-color: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px; font-size: 12px; color: #92400e; line-height: 1.5;">
-                🔒 <strong>تنبيه أمان:</strong> يرجى الحفاظ على سرية بيانات الدخول. يمكنكم دوماً الاطلاع على استهلاك الميزات والأيام المتبقية للاشتراك من خلال صفحة <strong>الإشتراك والفوترة</strong> في لوحة التحكم.
+                🔒 <strong>Security Notice:</strong> Please keep your workspace credentials secure. You can review current quotas, consumption, and expiration dates at any time under <strong>Billing</strong> in your dashboard.
               </div>
             </div>
 
             <div class="footer">
-              هذه الرسالة مرسلة آلياً من نظام إدارة منصة Avilo HR.<br>
-              في حال وجود أي استفسار، يرجى التواصل مع الدعم الفني للنظام.
+              This automated notification was generated by the Avilo HR Management Platform.<br>
+              If you have any questions, please contact technical support.
             </div>
           </div>
         </body>
