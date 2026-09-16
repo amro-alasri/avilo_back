@@ -340,9 +340,70 @@ export class TenantsService {
   }
 
   async remove(id: string) {
-    await this.findOne(id); // verify existence
-    return this.prisma.tenant.delete({
-      where: { id },
+    const tenant = await this.findOne(id); // verify existence
+
+    return this.prisma.$transaction(async (tx) => {
+      // 1. Files, notifications, and audit logs
+      await tx.file.deleteMany({ where: { tenantId: id } });
+      await tx.notification.deleteMany({ where: { tenantId: id } });
+      await tx.auditLog.deleteMany({ where: { tenantId: id } });
+
+      // 2. Payroll and Compensation
+      await tx.payslip.deleteMany({ where: { tenantId: id } });
+      await tx.payrollRun.deleteMany({ where: { tenantId: id } });
+      await tx.salaryComponent.deleteMany({
+        where: { salaryStructure: { employee: { tenantId: id } } },
+      });
+      await tx.salaryStructure.deleteMany({
+        where: { employee: { tenantId: id } },
+      });
+
+      // 3. Leaves
+      await tx.leaveRequest.deleteMany({ where: { tenantId: id } });
+      await tx.leaveBalance.deleteMany({ where: { tenantId: id } });
+      await tx.leaveType.deleteMany({ where: { tenantId: id } });
+
+      // 4. Schedules and Shifts
+      await tx.scheduleAssignment.deleteMany({ where: { tenantId: id } });
+      await tx.shift.deleteMany({
+        where: { schedule: { tenantId: id } },
+      });
+      await tx.schedule.deleteMany({ where: { tenantId: id } });
+
+      // 5. Attendances
+      await tx.attendance.deleteMany({ where: { tenantId: id } });
+
+      // 6. Employees and their sub-entities
+      await tx.emergencyContact.deleteMany({
+        where: { employee: { tenantId: id } },
+      });
+      await tx.contract.deleteMany({
+        where: { employee: { tenantId: id } },
+      });
+      await tx.employeeDocument.deleteMany({ where: { tenantId: id } });
+      await tx.employee.deleteMany({ where: { tenantId: id } });
+
+      // 7. Organization Structure (Departments, Branches, Organizations)
+      await tx.department.deleteMany({ where: { tenantId: id } });
+      await tx.branch.deleteMany({ where: { tenantId: id } });
+      await tx.organization.deleteMany({ where: { tenantId: id } });
+
+      // 8. Users and Roles
+      await tx.userRole.deleteMany({
+        where: { user: { tenantId: id } },
+      });
+      await tx.user.deleteMany({ where: { tenantId: id } });
+      await tx.role.deleteMany({ where: { tenantId: id } });
+
+      // 9. Billing, Subscriptions, and Settings
+      await tx.invoice.deleteMany({ where: { tenantId: id } });
+      await tx.subscription.deleteMany({ where: { tenantId: id } });
+      await tx.tenantSettings.deleteMany({ where: { tenantId: id } });
+
+      // 10. Finally, delete the Tenant itself
+      return tx.tenant.delete({
+        where: { id },
+      });
     });
   }
 

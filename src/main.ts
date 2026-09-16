@@ -14,7 +14,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
 
   const configService = app.get(ConfigService);
-  const frontendUrl = configService.get<string>('FRONTEND_URL', 'http://localhost:4444');
+  const frontendUrl = configService.get<string>('FRONTEND_URL', 'http://localhost:8888');
 
   await app.register(helmet, {
     hidePoweredBy: true,
@@ -38,15 +38,32 @@ async function bootstrap() {
       // Allow requests with no origin (such as mobile apps or internal curl requests)
       if (!origin) return callback(null, true);
 
+      const corsOriginsEnv = configService.get<string>('CORS_ORIGINS', '');
+      const dynamicOrigins = corsOriginsEnv ? corsOriginsEnv.split(',').map((o) => o.trim()) : [];
+
       const allowedOrigins = [
         frontendUrl,
+        'https://avilo.ysofts..net',
+        'https://avilo.ysofts.net',
         'http://localhost:4444',
         'http://localhost:3000',
+        'http://localhost:8888',
+        'http://127.0.0.1:8888',
         'http://127.0.0.1:4444',
         'http://127.0.0.1:3000',
+        ...dynamicOrigins,
       ];
 
-      const isAllowed = allowedOrigins.some((allowed) => allowed && (origin === allowed || origin.startsWith(allowed)));
+      const isYsoftsDomain =
+        origin.endsWith('.ysofts.net') ||
+        origin.endsWith('.ysofts..net') ||
+        origin === 'https://avilo.ysofts..net' ||
+        origin === 'https://avilo.ysofts.net';
+
+      const isAllowed =
+        isYsoftsDomain ||
+        allowedOrigins.some((allowed) => allowed && (origin === allowed || origin.startsWith(allowed)));
+
       if (isAllowed || process.env.NODE_ENV !== 'production') {
         return callback(null, true);
       }

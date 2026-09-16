@@ -19,6 +19,7 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { MailModule } from './modules/mail/mail.module.js';
 import { SettingsModule } from './modules/settings/settings.module.js';
+import { parseRedisConnection } from './core/utils/redis.util.js';
 
 @Module({
   imports: [
@@ -26,10 +27,11 @@ import { SettingsModule } from './modules/settings/settings.module.js';
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        connection: {
-          host: configService.get<string>('REDIS_HOST', 'localhost'),
-          port: configService.get<number>('REDIS_PORT', 6379),
-        },
+        connection: parseRedisConnection(
+          configService.get<string>('REDIS_URL'),
+          configService.get<string>('REDIS_HOST', 'localhost'),
+          configService.get<number>('REDIS_PORT', 6379),
+        ),
       }),
       inject: [ConfigService],
     }),
