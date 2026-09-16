@@ -1,11 +1,13 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
 import { PrismaClient } from '../../prisma/generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { ConfigService } from '@nestjs/config';
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(PrismaService.name);
   private pool: Pool;
 
   constructor(configService: ConfigService) {
@@ -24,27 +26,83 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
         where: { domain: '' },
         data: { domain: null },
       });
-      // Ensure email_settings JSONB column exists on tenant_settings
-      await this.$executeRawUnsafe('ALTER TABLE "tenant_settings" ADD COLUMN IF NOT EXISTS "email_settings" JSONB;');
-      // Ensure EmployeeStatus enum has suspended and rejected values
-      await this.$executeRawUnsafe('ALTER TYPE "EmployeeStatus" ADD VALUE IF NOT EXISTS \'suspended\';');
-      await this.$executeRawUnsafe('ALTER TYPE "EmployeeStatus" ADD VALUE IF NOT EXISTS \'rejected\';');
+      // Automatically guarantee default SuperAdmin in production & dev
+      await this.ensureDefaultSuperAdmin();
+    } catch (e: any) {
+      this.logger.warn(`[Bootstrap] Initialization notice: ${e.message}`);
+    }
+  }
 
-      // Ensure new Tenant columns exist
-      await this.$executeRawUnsafe('ALTER TABLE "tenants" ADD COLUMN IF NOT EXISTS "contact_email" TEXT;');
-      await this.$executeRawUnsafe('ALTER TABLE "tenants" ADD COLUMN IF NOT EXISTS "contact_phone" TEXT;');
+  private async ensureDefaultSuperAdmin() {
+    const superAdminEmail = (process.env.SUPERADMIN_EMAIL || 'superadmin@avilo.com').trim().toLowerCase();
+    const rawPassword = process.env.SUPERADMIN_PASSWORD || 'superadmin123';
 
-      // Ensure new Subscription columns exist
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "price" DOUBLE PRECISION DEFAULT 0;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "currency" TEXT DEFAULT \'USD\';');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "max_employees" INTEGER DEFAULT 10;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "max_locations" INTEGER DEFAULT 1;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "has_payroll" BOOLEAN DEFAULT true;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "has_leaves" BOOLEAN DEFAULT true;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "has_voice_biometrics" BOOLEAN DEFAULT false;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "has_face_biometrics" BOOLEAN DEFAULT false;');
-      await this.$executeRawUnsafe('ALTER TABLE "subscriptions" ADD COLUMN IF NOT EXISTS "features" JSONB;');
-    } catch (_) {}
+    // 1. Ensure System Tenant exists
+    const systemTenant = await this.tenant.upsert({
+      where: { slug: 'system' },
+      update: {},
+      create: {
+        name: 'Avilo System',
+        slug: 'system',
+        status: 'active',
+        plan: 'enterprise',
+        contactEmail: superAdminEmail,
+      },
+    });
+
+    // 2. Ensure SuperAdmin Role exists
+    const superAdminRole = await this.role.upsert({
+      where: { name_tenantId: { name: 'SuperAdmin', tenantId: systemTenant.id } },
+      update: {
+        permissions: ['system_admin', 'manage_tenants', 'manage_subscriptions', 'full_access'],
+      },
+      create: {
+        tenantId: systemTenant.id,
+        name: 'SuperAdmin',
+        description: 'System Administrator with full access to manage all tenants and companies',
+        permissions: ['system_admin', 'manage_tenants', 'manage_subscriptions', 'full_access'],
+      },
+    });
+
+    // 3. Check if SuperAdmin User exists
+    const existingUser = await this.user.findFirst({
+      where: { email: superAdminEmail, tenantId: systemTenant.id },
+    });
+
+    if (!existingUser) {
+      const hashedPassword = await argon2.hash(rawPassword);
+      const newUser = await this.user.create({
+        data: {
+          tenantId: systemTenant.id,
+          email: superAdminEmail,
+          password: hashedPassword,
+          firstName: process.env.SUPERADMIN_FIRST_NAME || 'System',
+          lastName: process.env.SUPERADMIN_LAST_NAME || 'Admin',
+          status: 'active',
+        },
+      });
+
+      await this.userRole.upsert({
+        where: { userId_roleId: { userId: newUser.id, roleId: superAdminRole.id } },
+        update: {},
+        create: {
+          userId: newUser.id,
+          roleId: superAdminRole.id,
+        },
+      });
+
+      this.logger.log(`[Bootstrap] Default SuperAdmin [${superAdminEmail}] successfully initialized.`);
+    } else {
+      // Ensure user_role linkage exists
+      await this.userRole.upsert({
+        where: { userId_roleId: { userId: existingUser.id, roleId: superAdminRole.id } },
+        update: {},
+        create: {
+          userId: existingUser.id,
+          roleId: superAdminRole.id,
+        },
+      });
+    }
   }
 
   async onModuleDestroy() {

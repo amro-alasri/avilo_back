@@ -139,12 +139,26 @@ services-up: db-up redis-up
 services-down: db-down redis-down
 	@echo "$(RED)✔ All services stopped.$(RESET)"
 
-# ── Prisma ────────────────────────────────────────────────────
+# ── Prisma & Database ──────────────────────────────────────────
 
 migrate:
-	@echo "$(GREEN)▶ Running prisma db push...$(RESET)"
+	@echo "$(GREEN)▶ Applying pending migrations in production mode...$(RESET)"
+	@cd $(BACKEND_DIR) && npx prisma migrate deploy
+	@echo "$(GREEN)✔ Database migrations applied successfully.$(RESET)"
+
+migrate-dev:
+	@echo "$(GREEN)▶ Creating and applying migration from schema changes...$(RESET)"
+	@cd $(BACKEND_DIR) && npx prisma migrate dev
+	@echo "$(GREEN)✔ Schema migration created and applied.$(RESET)"
+
+migrate-status:
+	@echo "$(GREEN)▶ Checking database migration status...$(RESET)"
+	@cd $(BACKEND_DIR) && npx prisma migrate status
+
+db-push:
+	@echo "$(YELLOW)▶ Pushing schema directly to database (development prototype only)...$(RESET)"
 	@cd $(BACKEND_DIR) && npx prisma db push
-	@echo "$(GREEN)✔ Schema synced.$(RESET)"
+	@echo "$(GREEN)✔ Schema pushed.$(RESET)"
 
 generate:
 	@echo "$(GREEN)▶ Generating Prisma client...$(RESET)"
@@ -152,9 +166,12 @@ generate:
 	@echo "$(GREEN)✔ Prisma client generated.$(RESET)"
 
 seed:
-	@echo "$(GREEN)▶ Seeding default chart of accounts...$(RESET)"
-	@cd $(BACKEND_DIR) && npx prisma db execute --file=./seed-accounts.sql
+	@echo "$(GREEN)▶ Seeding SuperAdmin and system workspace data...$(RESET)"
+	@cd $(BACKEND_DIR) && npx tsx ./prisma/seed.ts
 	@echo "$(GREEN)✔ Seed complete.$(RESET)"
+
+db-setup: migrate seed
+	@echo "$(GREEN)✔ Database migrated and default SuperAdmin ready!$(RESET)"
 
 # ── Development ───────────────────────────────────────────────
 
