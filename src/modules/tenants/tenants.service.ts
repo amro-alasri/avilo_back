@@ -408,8 +408,16 @@ export class TenantsService {
   }
 
   async verifyBySlug(slug: string) {
-    const tenant = await this.prisma.tenant.findUnique({
-      where: { slug },
+    const clean = slug ? slug.trim() : '';
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        OR: [
+          { slug: { equals: clean, mode: 'insensitive' } },
+          { id: clean },
+          { domain: { equals: clean, mode: 'insensitive' } },
+          { name: { equals: clean, mode: 'insensitive' } },
+        ],
+      },
       select: {
         id: true,
         name: true,
@@ -418,9 +426,9 @@ export class TenantsService {
           select: {
             logoUrl: true,
             primaryColor: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
 
     if (!tenant) throw new NotFoundException('Company not found');

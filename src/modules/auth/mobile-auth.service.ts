@@ -15,8 +15,16 @@ export class MobileAuthService {
   ) {}
 
   async mobileLogin(loginDto: LoginDto, tenantSlug: string) {
-    const tenant = await this.prisma.tenant.findUnique({
-      where: { slug: tenantSlug },
+    const cleanSlug = tenantSlug ? tenantSlug.trim() : '';
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        OR: [
+          { slug: { equals: cleanSlug, mode: 'insensitive' } },
+          { id: cleanSlug },
+          { domain: { equals: cleanSlug, mode: 'insensitive' } },
+          { name: { equals: cleanSlug, mode: 'insensitive' } },
+        ],
+      },
     });
 
     if (!tenant) throw new UnauthorizedException('Tenant not found');
@@ -62,14 +70,25 @@ export class MobileAuthService {
         email: employee.email,
         firstName: employee.firstName,
         lastName: employee.lastName,
+        tenantId: tenant.id,
+        tenantName: tenant.name,
+        tenantSlug: tenant.slug,
         employeeNumber: employee.employeeNumber,
       }
     };
   }
 
   async mobileRegister(dto: RegisterEmployeeDto) {
-    const tenant = await this.prisma.tenant.findUnique({
-      where: { slug: dto.tenantSlug },
+    const cleanSlug = dto.tenantSlug ? dto.tenantSlug.trim() : '';
+    const tenant = await this.prisma.tenant.findFirst({
+      where: {
+        OR: [
+          { slug: { equals: cleanSlug, mode: 'insensitive' } },
+          { id: cleanSlug },
+          { domain: { equals: cleanSlug, mode: 'insensitive' } },
+          { name: { equals: cleanSlug, mode: 'insensitive' } },
+        ],
+      },
     });
 
     if (!tenant) throw new UnauthorizedException('Company not found');

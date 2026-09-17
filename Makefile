@@ -362,3 +362,9 @@ clean:
 	@rm -rf $(BACKEND_DIR)/dist
 	@rm -rf $(FRONTEND_DIR)/.next
 	@echo "$(RED)✔ Clean complete.$(RESET)"
+
+
+
+
+resolve:
+	npx prisma migrate resolve --applied 20260917000000_init
