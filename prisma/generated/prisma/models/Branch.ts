@@ -275,6 +275,9 @@ export type BranchWhereInput = {
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   departments?: Prisma.DepartmentListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
+  geofenceZones?: Prisma.GeofenceZoneListRelationFilter
+  beacons?: Prisma.BeaconListRelationFilter
+  kioskDevices?: Prisma.KioskDeviceListRelationFilter
 }
 
 export type BranchOrderByWithRelationInput = {
@@ -292,6 +295,9 @@ export type BranchOrderByWithRelationInput = {
   organization?: Prisma.OrganizationOrderByWithRelationInput
   departments?: Prisma.DepartmentOrderByRelationAggregateInput
   employees?: Prisma.EmployeeOrderByRelationAggregateInput
+  geofenceZones?: Prisma.GeofenceZoneOrderByRelationAggregateInput
+  beacons?: Prisma.BeaconOrderByRelationAggregateInput
+  kioskDevices?: Prisma.KioskDeviceOrderByRelationAggregateInput
 }
 
 export type BranchWhereUniqueInput = Prisma.AtLeast<{
@@ -312,6 +318,9 @@ export type BranchWhereUniqueInput = Prisma.AtLeast<{
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   departments?: Prisma.DepartmentListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
+  geofenceZones?: Prisma.GeofenceZoneListRelationFilter
+  beacons?: Prisma.BeaconListRelationFilter
+  kioskDevices?: Prisma.KioskDeviceListRelationFilter
 }, "id">
 
 export type BranchOrderByWithAggregationInput = {
@@ -364,6 +373,9 @@ export type BranchCreateInput = {
   organization: Prisma.OrganizationCreateNestedOneWithoutBranchesInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutBranchInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateInput = {
@@ -380,6 +392,9 @@ export type BranchUncheckedCreateInput = {
   updatedAt?: Date | string
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutBranchInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconUncheckedCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUpdateInput = {
@@ -396,6 +411,9 @@ export type BranchUpdateInput = {
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBranchesNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutBranchNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateInput = {
@@ -412,6 +430,9 @@ export type BranchUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutBranchNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUncheckedUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyInput = {
@@ -617,6 +638,48 @@ export type BranchUpdateOneWithoutEmployeesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutEmployeesInput, Prisma.BranchUpdateWithoutEmployeesInput>, Prisma.BranchUncheckedUpdateWithoutEmployeesInput>
 }
 
+export type BranchCreateNestedOneWithoutKioskDevicesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutKioskDevicesInput, Prisma.BranchUncheckedCreateWithoutKioskDevicesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutKioskDevicesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutKioskDevicesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutKioskDevicesInput, Prisma.BranchUncheckedCreateWithoutKioskDevicesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutKioskDevicesInput
+  upsert?: Prisma.BranchUpsertWithoutKioskDevicesInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutKioskDevicesInput, Prisma.BranchUpdateWithoutKioskDevicesInput>, Prisma.BranchUncheckedUpdateWithoutKioskDevicesInput>
+}
+
+export type BranchCreateNestedOneWithoutGeofenceZonesInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutGeofenceZonesInput, Prisma.BranchUncheckedCreateWithoutGeofenceZonesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutGeofenceZonesInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutGeofenceZonesNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutGeofenceZonesInput, Prisma.BranchUncheckedCreateWithoutGeofenceZonesInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutGeofenceZonesInput
+  upsert?: Prisma.BranchUpsertWithoutGeofenceZonesInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutGeofenceZonesInput, Prisma.BranchUpdateWithoutGeofenceZonesInput>, Prisma.BranchUncheckedUpdateWithoutGeofenceZonesInput>
+}
+
+export type BranchCreateNestedOneWithoutBeaconsInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutBeaconsInput, Prisma.BranchUncheckedCreateWithoutBeaconsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutBeaconsInput
+  connect?: Prisma.BranchWhereUniqueInput
+}
+
+export type BranchUpdateOneRequiredWithoutBeaconsNestedInput = {
+  create?: Prisma.XOR<Prisma.BranchCreateWithoutBeaconsInput, Prisma.BranchUncheckedCreateWithoutBeaconsInput>
+  connectOrCreate?: Prisma.BranchCreateOrConnectWithoutBeaconsInput
+  upsert?: Prisma.BranchUpsertWithoutBeaconsInput
+  connect?: Prisma.BranchWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BranchUpdateToOneWithWhereWithoutBeaconsInput, Prisma.BranchUpdateWithoutBeaconsInput>, Prisma.BranchUncheckedUpdateWithoutBeaconsInput>
+}
+
 export type BranchCreateWithoutOrganizationInput = {
   id?: string
   tenantId: string
@@ -630,6 +693,9 @@ export type BranchCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   departments?: Prisma.DepartmentCreateNestedManyWithoutBranchInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutOrganizationInput = {
@@ -645,6 +711,9 @@ export type BranchUncheckedCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutBranchInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconUncheckedCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutOrganizationInput = {
@@ -703,6 +772,9 @@ export type BranchCreateWithoutDepartmentsInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutBranchesInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutDepartmentsInput = {
@@ -718,6 +790,9 @@ export type BranchUncheckedCreateWithoutDepartmentsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconUncheckedCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutDepartmentsInput = {
@@ -749,6 +824,9 @@ export type BranchUpdateWithoutDepartmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBranchesNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutDepartmentsInput = {
@@ -764,6 +842,9 @@ export type BranchUncheckedUpdateWithoutDepartmentsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUncheckedUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateWithoutEmployeesInput = {
@@ -779,6 +860,9 @@ export type BranchCreateWithoutEmployeesInput = {
   updatedAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutBranchesInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceCreateNestedManyWithoutBranchInput
 }
 
 export type BranchUncheckedCreateWithoutEmployeesInput = {
@@ -794,6 +878,9 @@ export type BranchUncheckedCreateWithoutEmployeesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconUncheckedCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedCreateNestedManyWithoutBranchInput
 }
 
 export type BranchCreateOrConnectWithoutEmployeesInput = {
@@ -825,6 +912,9 @@ export type BranchUpdateWithoutEmployeesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutBranchesNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutEmployeesInput = {
@@ -840,6 +930,273 @@ export type BranchUncheckedUpdateWithoutEmployeesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUncheckedUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutKioskDevicesInput = {
+  id?: string
+  tenantId: string
+  name: string
+  code?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  geofenceRadius?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutBranchesInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutKioskDevicesInput = {
+  id?: string
+  tenantId: string
+  orgId: string
+  name: string
+  code?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  geofenceRadius?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutKioskDevicesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutKioskDevicesInput, Prisma.BranchUncheckedCreateWithoutKioskDevicesInput>
+}
+
+export type BranchUpsertWithoutKioskDevicesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutKioskDevicesInput, Prisma.BranchUncheckedUpdateWithoutKioskDevicesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutKioskDevicesInput, Prisma.BranchUncheckedCreateWithoutKioskDevicesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutKioskDevicesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutKioskDevicesInput, Prisma.BranchUncheckedUpdateWithoutKioskDevicesInput>
+}
+
+export type BranchUpdateWithoutKioskDevicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  geofenceRadius?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBranchesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutKioskDevicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  orgId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  geofenceRadius?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutGeofenceZonesInput = {
+  id?: string
+  tenantId: string
+  name: string
+  code?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  geofenceRadius?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutBranchesInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutGeofenceZonesInput = {
+  id?: string
+  tenantId: string
+  orgId: string
+  name: string
+  code?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  geofenceRadius?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  beacons?: Prisma.BeaconUncheckedCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutGeofenceZonesInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutGeofenceZonesInput, Prisma.BranchUncheckedCreateWithoutGeofenceZonesInput>
+}
+
+export type BranchUpsertWithoutGeofenceZonesInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutGeofenceZonesInput, Prisma.BranchUncheckedUpdateWithoutGeofenceZonesInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutGeofenceZonesInput, Prisma.BranchUncheckedCreateWithoutGeofenceZonesInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutGeofenceZonesInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutGeofenceZonesInput, Prisma.BranchUncheckedUpdateWithoutGeofenceZonesInput>
+}
+
+export type BranchUpdateWithoutGeofenceZonesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  geofenceRadius?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBranchesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutGeofenceZonesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  orgId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  geofenceRadius?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUncheckedUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchCreateWithoutBeaconsInput = {
+  id?: string
+  tenantId: string
+  name: string
+  code?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  geofenceRadius?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organization: Prisma.OrganizationCreateNestedOneWithoutBranchesInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceCreateNestedManyWithoutBranchInput
+}
+
+export type BranchUncheckedCreateWithoutBeaconsInput = {
+  id?: string
+  tenantId: string
+  orgId: string
+  name: string
+  code?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  geofenceRadius?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutBranchInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutBranchInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedCreateNestedManyWithoutBranchInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedCreateNestedManyWithoutBranchInput
+}
+
+export type BranchCreateOrConnectWithoutBeaconsInput = {
+  where: Prisma.BranchWhereUniqueInput
+  create: Prisma.XOR<Prisma.BranchCreateWithoutBeaconsInput, Prisma.BranchUncheckedCreateWithoutBeaconsInput>
+}
+
+export type BranchUpsertWithoutBeaconsInput = {
+  update: Prisma.XOR<Prisma.BranchUpdateWithoutBeaconsInput, Prisma.BranchUncheckedUpdateWithoutBeaconsInput>
+  create: Prisma.XOR<Prisma.BranchCreateWithoutBeaconsInput, Prisma.BranchUncheckedCreateWithoutBeaconsInput>
+  where?: Prisma.BranchWhereInput
+}
+
+export type BranchUpdateToOneWithWhereWithoutBeaconsInput = {
+  where?: Prisma.BranchWhereInput
+  data: Prisma.XOR<Prisma.BranchUpdateWithoutBeaconsInput, Prisma.BranchUncheckedUpdateWithoutBeaconsInput>
+}
+
+export type BranchUpdateWithoutBeaconsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  geofenceRadius?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutBranchesNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUpdateManyWithoutBranchNestedInput
+}
+
+export type BranchUncheckedUpdateWithoutBeaconsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  orgId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  code?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  geofenceRadius?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutBranchNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchCreateManyOrganizationInput = {
@@ -868,6 +1225,9 @@ export type BranchUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUpdateManyWithoutBranchNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateWithoutOrganizationInput = {
@@ -883,6 +1243,9 @@ export type BranchUncheckedUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutBranchNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutBranchNestedInput
+  geofenceZones?: Prisma.GeofenceZoneUncheckedUpdateManyWithoutBranchNestedInput
+  beacons?: Prisma.BeaconUncheckedUpdateManyWithoutBranchNestedInput
+  kioskDevices?: Prisma.KioskDeviceUncheckedUpdateManyWithoutBranchNestedInput
 }
 
 export type BranchUncheckedUpdateManyWithoutOrganizationInput = {
@@ -906,11 +1269,17 @@ export type BranchUncheckedUpdateManyWithoutOrganizationInput = {
 export type BranchCountOutputType = {
   departments: number
   employees: number
+  geofenceZones: number
+  beacons: number
+  kioskDevices: number
 }
 
 export type BranchCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   departments?: boolean | BranchCountOutputTypeCountDepartmentsArgs
   employees?: boolean | BranchCountOutputTypeCountEmployeesArgs
+  geofenceZones?: boolean | BranchCountOutputTypeCountGeofenceZonesArgs
+  beacons?: boolean | BranchCountOutputTypeCountBeaconsArgs
+  kioskDevices?: boolean | BranchCountOutputTypeCountKioskDevicesArgs
 }
 
 /**
@@ -937,6 +1306,27 @@ export type BranchCountOutputTypeCountEmployeesArgs<ExtArgs extends runtime.Type
   where?: Prisma.EmployeeWhereInput
 }
 
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountGeofenceZonesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GeofenceZoneWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountBeaconsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BeaconWhereInput
+}
+
+/**
+ * BranchCountOutputType without action
+ */
+export type BranchCountOutputTypeCountKioskDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.KioskDeviceWhereInput
+}
+
 
 export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -953,6 +1343,9 @@ export type BranchSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   departments?: boolean | Prisma.Branch$departmentsArgs<ExtArgs>
   employees?: boolean | Prisma.Branch$employeesArgs<ExtArgs>
+  geofenceZones?: boolean | Prisma.Branch$geofenceZonesArgs<ExtArgs>
+  beacons?: boolean | Prisma.Branch$beaconsArgs<ExtArgs>
+  kioskDevices?: boolean | Prisma.Branch$kioskDevicesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["branch"]>
 
@@ -1005,6 +1398,9 @@ export type BranchInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   departments?: boolean | Prisma.Branch$departmentsArgs<ExtArgs>
   employees?: boolean | Prisma.Branch$employeesArgs<ExtArgs>
+  geofenceZones?: boolean | Prisma.Branch$geofenceZonesArgs<ExtArgs>
+  beacons?: boolean | Prisma.Branch$beaconsArgs<ExtArgs>
+  kioskDevices?: boolean | Prisma.Branch$kioskDevicesArgs<ExtArgs>
   _count?: boolean | Prisma.BranchCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BranchIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1020,6 +1416,9 @@ export type $BranchPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     organization: Prisma.$OrganizationPayload<ExtArgs>
     departments: Prisma.$DepartmentPayload<ExtArgs>[]
     employees: Prisma.$EmployeePayload<ExtArgs>[]
+    geofenceZones: Prisma.$GeofenceZonePayload<ExtArgs>[]
+    beacons: Prisma.$BeaconPayload<ExtArgs>[]
+    kioskDevices: Prisma.$KioskDevicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1430,6 +1829,9 @@ export interface Prisma__BranchClient<T, Null = never, ExtArgs extends runtime.T
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   departments<T extends Prisma.Branch$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.Branch$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  geofenceZones<T extends Prisma.Branch$geofenceZonesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$geofenceZonesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GeofenceZonePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  beacons<T extends Prisma.Branch$beaconsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$beaconsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BeaconPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  kioskDevices<T extends Prisma.Branch$kioskDevicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Branch$kioskDevicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$KioskDevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1916,6 +2318,78 @@ export type Branch$employeesArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.EmployeeScalarFieldEnum | Prisma.EmployeeScalarFieldEnum[]
+}
+
+/**
+ * Branch.geofenceZones
+ */
+export type Branch$geofenceZonesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GeofenceZone
+   */
+  select?: Prisma.GeofenceZoneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GeofenceZone
+   */
+  omit?: Prisma.GeofenceZoneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GeofenceZoneInclude<ExtArgs> | null
+  where?: Prisma.GeofenceZoneWhereInput
+  orderBy?: Prisma.GeofenceZoneOrderByWithRelationInput | Prisma.GeofenceZoneOrderByWithRelationInput[]
+  cursor?: Prisma.GeofenceZoneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GeofenceZoneScalarFieldEnum | Prisma.GeofenceZoneScalarFieldEnum[]
+}
+
+/**
+ * Branch.beacons
+ */
+export type Branch$beaconsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Beacon
+   */
+  select?: Prisma.BeaconSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Beacon
+   */
+  omit?: Prisma.BeaconOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BeaconInclude<ExtArgs> | null
+  where?: Prisma.BeaconWhereInput
+  orderBy?: Prisma.BeaconOrderByWithRelationInput | Prisma.BeaconOrderByWithRelationInput[]
+  cursor?: Prisma.BeaconWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BeaconScalarFieldEnum | Prisma.BeaconScalarFieldEnum[]
+}
+
+/**
+ * Branch.kioskDevices
+ */
+export type Branch$kioskDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KioskDevice
+   */
+  select?: Prisma.KioskDeviceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KioskDevice
+   */
+  omit?: Prisma.KioskDeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KioskDeviceInclude<ExtArgs> | null
+  where?: Prisma.KioskDeviceWhereInput
+  orderBy?: Prisma.KioskDeviceOrderByWithRelationInput | Prisma.KioskDeviceOrderByWithRelationInput[]
+  cursor?: Prisma.KioskDeviceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.KioskDeviceScalarFieldEnum | Prisma.KioskDeviceScalarFieldEnum[]
 }
 
 /**

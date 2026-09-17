@@ -5,6 +5,7 @@ import { LocationVerificationService } from './services/location-verification.se
 import { DeviceVerificationService } from './services/device-verification.service.js';
 import { FaceVerificationService } from './services/face-verification.service.js';
 import { AttendancePolicyService } from './services/attendance-policy.service.js';
+import { BiometricCryptoService } from './services/biometric-crypto.service.js';
 
 @Module({
   controllers: [AttendancesController],
@@ -14,6 +15,8 @@ import { AttendancePolicyService } from './services/attendance-policy.service.js
     DeviceVerificationService,
     FaceVerificationService,
     AttendancePolicyService,
+    BiometricCryptoService,
   ],
+  exports: [AttendancesService],
 })
 export class AttendancesModule {}

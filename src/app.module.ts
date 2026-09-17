@@ -20,10 +20,12 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { MailModule } from './modules/mail/mail.module.js';
 import { SettingsModule } from './modules/settings/settings.module.js';
 import { parseRedisConnection } from './core/utils/redis.util.js';
+import { RedisModule } from './core/redis/redis.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    RedisModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

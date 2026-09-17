@@ -117,3 +117,11 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const BiometricType = {
+  face_arcface_512: 'face_arcface_512',
+  voice_ecapa_192: 'voice_ecapa_192'
+} as const
+
+export type BiometricType = (typeof BiometricType)[keyof typeof BiometricType]

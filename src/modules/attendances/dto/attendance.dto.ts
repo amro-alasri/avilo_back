@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsObject, IsOptional, ValidateNested } from 'class-validator';
+import { IsEnum, IsNumber, IsObject, IsOptional, ValidateNested, IsNotEmpty, IsString, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 import { AttendanceMethod } from '../../../../prisma/generated/prisma/enums.js';
 
@@ -27,6 +27,34 @@ class LocationDto {
   address?: string;
 }
 
+export class BeaconDto {
+  @IsNotEmpty()
+  uuid: string;
+
+  @IsNumber()
+  major: number;
+
+  @IsNumber()
+  minor: number;
+
+  @IsNumber()
+  rssi: number;
+}
+
+export class BiometricPayloadDto {
+  @IsOptional()
+  challengeId?: string;
+
+  @IsOptional()
+  embedding?: number[];
+
+  @IsOptional()
+  stepLogs?: any[];
+
+  @IsOptional()
+  livenessScore?: number;
+}
+
 export class CheckInDto {
   @IsEnum(AttendanceMethod)
   method: AttendanceMethod;
@@ -35,6 +63,22 @@ export class CheckInDto {
   @ValidateNested()
   @Type(() => LocationDto)
   location?: LocationDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BiometricPayloadDto)
+  biometrics?: BiometricPayloadDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BeaconDto)
+  beacon?: BeaconDto;
+
+  @IsOptional()
+  deviceUuid?: string;
+
+  @IsOptional()
+  kioskDeviceId?: string;
 }
 
 export class CheckOutDto {
@@ -45,4 +89,20 @@ export class CheckOutDto {
   @ValidateNested()
   @Type(() => LocationDto)
   location?: LocationDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BiometricPayloadDto)
+  biometrics?: BiometricPayloadDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BeaconDto)
+  beacon?: BeaconDto;
+
+  @IsOptional()
+  deviceUuid?: string;
+
+  @IsOptional()
+  kioskDeviceId?: string;
 }

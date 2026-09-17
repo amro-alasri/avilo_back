@@ -32,6 +32,11 @@ export class EmployeesController {
     return this.employeesService.update(tenantId, id, dto);
   }
 
+  @Delete(':id/biometrics')
+  resetBiometrics(@TenantId() tenantId: string, @Param('id') id: string) {
+    return this.employeesService.resetBiometricTemplate(tenantId, id);
+  }
+
   @Delete(':id')
   remove(@TenantId() tenantId: string, @Param('id') id: string) {
     return this.employeesService.remove(tenantId, id);

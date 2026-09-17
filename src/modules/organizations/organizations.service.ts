@@ -61,7 +61,12 @@ export class OrganizationsService {
 
     return this.prisma.branch.findMany({
       where,
-      include: { departments: true },
+      include: {
+        departments: true,
+        geofenceZones: true,
+        beacons: true,
+        kioskDevices: true,
+      },
     });
   }
 
@@ -124,4 +129,114 @@ export class OrganizationsService {
       where: { id },
     });
   }
+
+  // --- Geofence Zones ---
+  async addGeofenceZone(
+    tenantId: string,
+    branchId: string,
+    dto: {
+      name: string;
+      zoneType?: string;
+      radiusMeters?: number;
+      latitude?: number;
+      longitude?: number;
+      polygonCoords?: any;
+    },
+  ) {
+    const branch = await this.prisma.branch.findFirst({ where: { id: branchId, tenantId } });
+    if (!branch) throw new NotFoundException('Branch not found');
+    return this.prisma.geofenceZone.create({
+      data: {
+        tenantId,
+        branchId,
+        name: dto.name,
+        zoneType: dto.zoneType || 'circle',
+        radiusMeters: dto.radiusMeters,
+        latitude: dto.latitude,
+        longitude: dto.longitude,
+        polygonCoords: dto.polygonCoords,
+      },
+    });
+  }
+
+  async deleteGeofenceZone(tenantId: string, zoneId: string) {
+    const zone = await this.prisma.geofenceZone.findFirst({ where: { id: zoneId, tenantId } });
+    if (!zone) throw new NotFoundException('Geofence zone not found');
+    return this.prisma.geofenceZone.delete({ where: { id: zoneId } });
+  }
+
+  // --- Beacons ---
+  async addBeacon(
+    tenantId: string,
+    branchId: string,
+    dto: {
+      name: string;
+      uuid: string;
+      major: number;
+      minor: number;
+      rssiThreshold?: number;
+    },
+  ) {
+    const branch = await this.prisma.branch.findFirst({ where: { id: branchId, tenantId } });
+    if (!branch) throw new NotFoundException('Branch not found');
+    return this.prisma.beacon.create({
+      data: {
+        tenantId,
+        branchId,
+        name: dto.name,
+        uuid: dto.uuid,
+        major: dto.major,
+        minor: dto.minor,
+        rssiThreshold: dto.rssiThreshold ?? -85,
+      },
+    });
+  }
+
+  async deleteBeacon(tenantId: string, beaconId: string) {
+    const beacon = await this.prisma.beacon.findFirst({ where: { id: beaconId, tenantId } });
+    if (!beacon) throw new NotFoundException('Beacon not found');
+    return this.prisma.beacon.delete({ where: { id: beaconId } });
+  }
+
+  // --- Kiosk Devices ---
+  async getKioskDevices(tenantId: string, branchId?: string) {
+    const where: any = { tenantId };
+    if (branchId) where.branchId = branchId;
+    return this.prisma.kioskDevice.findMany({
+      where,
+      include: { branch: { select: { id: true, name: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async addKioskDevice(
+    tenantId: string,
+    branchId: string,
+    dto: {
+      name: string;
+      deviceUuid: string;
+      appVersion?: string;
+    },
+  ) {
+    const branch = await this.prisma.branch.findFirst({ where: { id: branchId, tenantId } });
+    if (!branch) throw new NotFoundException('Branch not found');
+    return this.prisma.kioskDevice.create({
+      data: {
+        tenantId,
+        branchId,
+        name: dto.name,
+        deviceUuid: dto.deviceUuid,
+        appVersion: dto.appVersion ?? '1.0.0',
+        status: 'active',
+        lastHeartbeatAt: new Date(),
+      },
+    });
+  }
+
+  async deleteKioskDevice(tenantId: string, kioskId: string) {
+    const kiosk = await this.prisma.kioskDevice.findFirst({ where: { id: kioskId, tenantId } });
+    if (!kiosk) throw new NotFoundException('Kiosk device not found');
+    return this.prisma.kioskDevice.delete({ where: { id: kioskId } });
+  }
 }
+

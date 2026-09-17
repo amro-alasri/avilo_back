@@ -28,10 +28,14 @@ export type AggregateAttendance = {
 
 export type AttendanceAvgAggregateOutputType = {
   confidenceScore: number | null
+  biometricScore: number | null
+  livenessScore: number | null
 }
 
 export type AttendanceSumAggregateOutputType = {
   confidenceScore: number | null
+  biometricScore: number | null
+  livenessScore: number | null
 }
 
 export type AttendanceMinAggregateOutputType = {
@@ -46,6 +50,11 @@ export type AttendanceMinAggregateOutputType = {
   status: string | null
   notes: string | null
   confidenceScore: number | null
+  biometricScore: number | null
+  livenessScore: number | null
+  challengeId: string | null
+  deviceId: string | null
+  kioskDeviceId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +71,11 @@ export type AttendanceMaxAggregateOutputType = {
   status: string | null
   notes: string | null
   confidenceScore: number | null
+  biometricScore: number | null
+  livenessScore: number | null
+  challengeId: string | null
+  deviceId: string | null
+  kioskDeviceId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -80,6 +94,12 @@ export type AttendanceCountAggregateOutputType = {
   status: number
   notes: number
   confidenceScore: number
+  biometricScore: number
+  livenessScore: number
+  challengeId: number
+  deviceId: number
+  kioskDeviceId: number
+  verificationFlags: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -88,10 +108,14 @@ export type AttendanceCountAggregateOutputType = {
 
 export type AttendanceAvgAggregateInputType = {
   confidenceScore?: true
+  biometricScore?: true
+  livenessScore?: true
 }
 
 export type AttendanceSumAggregateInputType = {
   confidenceScore?: true
+  biometricScore?: true
+  livenessScore?: true
 }
 
 export type AttendanceMinAggregateInputType = {
@@ -106,6 +130,11 @@ export type AttendanceMinAggregateInputType = {
   status?: true
   notes?: true
   confidenceScore?: true
+  biometricScore?: true
+  livenessScore?: true
+  challengeId?: true
+  deviceId?: true
+  kioskDeviceId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -122,6 +151,11 @@ export type AttendanceMaxAggregateInputType = {
   status?: true
   notes?: true
   confidenceScore?: true
+  biometricScore?: true
+  livenessScore?: true
+  challengeId?: true
+  deviceId?: true
+  kioskDeviceId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -140,6 +174,12 @@ export type AttendanceCountAggregateInputType = {
   status?: true
   notes?: true
   confidenceScore?: true
+  biometricScore?: true
+  livenessScore?: true
+  challengeId?: true
+  deviceId?: true
+  kioskDeviceId?: true
+  verificationFlags?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -245,6 +285,12 @@ export type AttendanceGroupByOutputType = {
   status: string
   notes: string | null
   confidenceScore: number | null
+  biometricScore: number | null
+  livenessScore: number | null
+  challengeId: string | null
+  deviceId: string | null
+  kioskDeviceId: string | null
+  verificationFlags: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: AttendanceCountAggregateOutputType | null
@@ -286,9 +332,16 @@ export type AttendanceWhereInput = {
   status?: Prisma.StringFilter<"Attendance"> | string
   notes?: Prisma.StringNullableFilter<"Attendance"> | string | null
   confidenceScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  biometricScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  livenessScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  challengeId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  deviceId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  kioskDeviceId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  verificationFlags?: Prisma.JsonNullableFilter<"Attendance">
   createdAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
+  kioskDevice?: Prisma.XOR<Prisma.KioskDeviceNullableScalarRelationFilter, Prisma.KioskDeviceWhereInput> | null
 }
 
 export type AttendanceOrderByWithRelationInput = {
@@ -305,9 +358,16 @@ export type AttendanceOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   confidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  biometricScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  livenessScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  challengeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  kioskDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  verificationFlags?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   employee?: Prisma.EmployeeOrderByWithRelationInput
+  kioskDevice?: Prisma.KioskDeviceOrderByWithRelationInput
 }
 
 export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
@@ -327,9 +387,16 @@ export type AttendanceWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"Attendance"> | string
   notes?: Prisma.StringNullableFilter<"Attendance"> | string | null
   confidenceScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  biometricScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  livenessScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  challengeId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  deviceId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  kioskDeviceId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  verificationFlags?: Prisma.JsonNullableFilter<"Attendance">
   createdAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
+  kioskDevice?: Prisma.XOR<Prisma.KioskDeviceNullableScalarRelationFilter, Prisma.KioskDeviceWhereInput> | null
 }, "id">
 
 export type AttendanceOrderByWithAggregationInput = {
@@ -346,6 +413,12 @@ export type AttendanceOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   confidenceScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  biometricScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  livenessScore?: Prisma.SortOrderInput | Prisma.SortOrder
+  challengeId?: Prisma.SortOrderInput | Prisma.SortOrder
+  deviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  kioskDeviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  verificationFlags?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.AttendanceCountOrderByAggregateInput
@@ -372,6 +445,12 @@ export type AttendanceScalarWhereWithAggregatesInput = {
   status?: Prisma.StringWithAggregatesFilter<"Attendance"> | string
   notes?: Prisma.StringNullableWithAggregatesFilter<"Attendance"> | string | null
   confidenceScore?: Prisma.FloatNullableWithAggregatesFilter<"Attendance"> | number | null
+  biometricScore?: Prisma.FloatNullableWithAggregatesFilter<"Attendance"> | number | null
+  livenessScore?: Prisma.FloatNullableWithAggregatesFilter<"Attendance"> | number | null
+  challengeId?: Prisma.StringNullableWithAggregatesFilter<"Attendance"> | string | null
+  deviceId?: Prisma.StringNullableWithAggregatesFilter<"Attendance"> | string | null
+  kioskDeviceId?: Prisma.StringNullableWithAggregatesFilter<"Attendance"> | string | null
+  verificationFlags?: Prisma.JsonNullableWithAggregatesFilter<"Attendance">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Attendance"> | Date | string
 }
@@ -389,9 +468,15 @@ export type AttendanceCreateInput = {
   status?: string
   notes?: string | null
   confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   employee: Prisma.EmployeeCreateNestedOneWithoutAttendancesInput
+  kioskDevice?: Prisma.KioskDeviceCreateNestedOneWithoutAttendancesInput
 }
 
 export type AttendanceUncheckedCreateInput = {
@@ -408,6 +493,12 @@ export type AttendanceUncheckedCreateInput = {
   status?: string
   notes?: string | null
   confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  kioskDeviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -425,9 +516,15 @@ export type AttendanceUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutAttendancesNestedInput
+  kioskDevice?: Prisma.KioskDeviceUpdateOneWithoutAttendancesNestedInput
 }
 
 export type AttendanceUncheckedUpdateInput = {
@@ -444,6 +541,12 @@ export type AttendanceUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kioskDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -462,6 +565,12 @@ export type AttendanceCreateManyInput = {
   status?: string
   notes?: string | null
   confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  kioskDeviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -479,6 +588,11 @@ export type AttendanceUpdateManyMutationInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -497,6 +611,12 @@ export type AttendanceUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kioskDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -525,12 +645,20 @@ export type AttendanceCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   confidenceScore?: Prisma.SortOrder
+  biometricScore?: Prisma.SortOrder
+  livenessScore?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
+  deviceId?: Prisma.SortOrder
+  kioskDeviceId?: Prisma.SortOrder
+  verificationFlags?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type AttendanceAvgOrderByAggregateInput = {
   confidenceScore?: Prisma.SortOrder
+  biometricScore?: Prisma.SortOrder
+  livenessScore?: Prisma.SortOrder
 }
 
 export type AttendanceMaxOrderByAggregateInput = {
@@ -545,6 +673,11 @@ export type AttendanceMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   confidenceScore?: Prisma.SortOrder
+  biometricScore?: Prisma.SortOrder
+  livenessScore?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
+  deviceId?: Prisma.SortOrder
+  kioskDeviceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -561,12 +694,19 @@ export type AttendanceMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   confidenceScore?: Prisma.SortOrder
+  biometricScore?: Prisma.SortOrder
+  livenessScore?: Prisma.SortOrder
+  challengeId?: Prisma.SortOrder
+  deviceId?: Prisma.SortOrder
+  kioskDeviceId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type AttendanceSumOrderByAggregateInput = {
   confidenceScore?: Prisma.SortOrder
+  biometricScore?: Prisma.SortOrder
+  livenessScore?: Prisma.SortOrder
 }
 
 export type AttendanceCreateNestedManyWithoutEmployeeInput = {
@@ -615,6 +755,48 @@ export type NullableEnumAttendanceMethodFieldUpdateOperationsInput = {
   set?: $Enums.AttendanceMethod | null
 }
 
+export type AttendanceCreateNestedManyWithoutKioskDeviceInput = {
+  create?: Prisma.XOR<Prisma.AttendanceCreateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput> | Prisma.AttendanceCreateWithoutKioskDeviceInput[] | Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput[]
+  connectOrCreate?: Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput | Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput[]
+  createMany?: Prisma.AttendanceCreateManyKioskDeviceInputEnvelope
+  connect?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+}
+
+export type AttendanceUncheckedCreateNestedManyWithoutKioskDeviceInput = {
+  create?: Prisma.XOR<Prisma.AttendanceCreateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput> | Prisma.AttendanceCreateWithoutKioskDeviceInput[] | Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput[]
+  connectOrCreate?: Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput | Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput[]
+  createMany?: Prisma.AttendanceCreateManyKioskDeviceInputEnvelope
+  connect?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+}
+
+export type AttendanceUpdateManyWithoutKioskDeviceNestedInput = {
+  create?: Prisma.XOR<Prisma.AttendanceCreateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput> | Prisma.AttendanceCreateWithoutKioskDeviceInput[] | Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput[]
+  connectOrCreate?: Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput | Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput[]
+  upsert?: Prisma.AttendanceUpsertWithWhereUniqueWithoutKioskDeviceInput | Prisma.AttendanceUpsertWithWhereUniqueWithoutKioskDeviceInput[]
+  createMany?: Prisma.AttendanceCreateManyKioskDeviceInputEnvelope
+  set?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  disconnect?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  delete?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  connect?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  update?: Prisma.AttendanceUpdateWithWhereUniqueWithoutKioskDeviceInput | Prisma.AttendanceUpdateWithWhereUniqueWithoutKioskDeviceInput[]
+  updateMany?: Prisma.AttendanceUpdateManyWithWhereWithoutKioskDeviceInput | Prisma.AttendanceUpdateManyWithWhereWithoutKioskDeviceInput[]
+  deleteMany?: Prisma.AttendanceScalarWhereInput | Prisma.AttendanceScalarWhereInput[]
+}
+
+export type AttendanceUncheckedUpdateManyWithoutKioskDeviceNestedInput = {
+  create?: Prisma.XOR<Prisma.AttendanceCreateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput> | Prisma.AttendanceCreateWithoutKioskDeviceInput[] | Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput[]
+  connectOrCreate?: Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput | Prisma.AttendanceCreateOrConnectWithoutKioskDeviceInput[]
+  upsert?: Prisma.AttendanceUpsertWithWhereUniqueWithoutKioskDeviceInput | Prisma.AttendanceUpsertWithWhereUniqueWithoutKioskDeviceInput[]
+  createMany?: Prisma.AttendanceCreateManyKioskDeviceInputEnvelope
+  set?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  disconnect?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  delete?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  connect?: Prisma.AttendanceWhereUniqueInput | Prisma.AttendanceWhereUniqueInput[]
+  update?: Prisma.AttendanceUpdateWithWhereUniqueWithoutKioskDeviceInput | Prisma.AttendanceUpdateWithWhereUniqueWithoutKioskDeviceInput[]
+  updateMany?: Prisma.AttendanceUpdateManyWithWhereWithoutKioskDeviceInput | Prisma.AttendanceUpdateManyWithWhereWithoutKioskDeviceInput[]
+  deleteMany?: Prisma.AttendanceScalarWhereInput | Prisma.AttendanceScalarWhereInput[]
+}
+
 export type AttendanceCreateWithoutEmployeeInput = {
   id?: string
   tenantId: string
@@ -628,8 +810,14 @@ export type AttendanceCreateWithoutEmployeeInput = {
   status?: string
   notes?: string | null
   confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
+  kioskDevice?: Prisma.KioskDeviceCreateNestedOneWithoutAttendancesInput
 }
 
 export type AttendanceUncheckedCreateWithoutEmployeeInput = {
@@ -645,6 +833,12 @@ export type AttendanceUncheckedCreateWithoutEmployeeInput = {
   status?: string
   notes?: string | null
   confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  kioskDeviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -692,8 +886,86 @@ export type AttendanceScalarWhereInput = {
   status?: Prisma.StringFilter<"Attendance"> | string
   notes?: Prisma.StringNullableFilter<"Attendance"> | string | null
   confidenceScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  biometricScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  livenessScore?: Prisma.FloatNullableFilter<"Attendance"> | number | null
+  challengeId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  deviceId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  kioskDeviceId?: Prisma.StringNullableFilter<"Attendance"> | string | null
+  verificationFlags?: Prisma.JsonNullableFilter<"Attendance">
   createdAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Attendance"> | Date | string
+}
+
+export type AttendanceCreateWithoutKioskDeviceInput = {
+  id?: string
+  tenantId: string
+  date: Date | string
+  checkIn?: Date | string | null
+  checkOut?: Date | string | null
+  checkInMethod?: $Enums.AttendanceMethod | null
+  checkOutMethod?: $Enums.AttendanceMethod | null
+  checkInLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  checkOutLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: string
+  notes?: string | null
+  confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employee: Prisma.EmployeeCreateNestedOneWithoutAttendancesInput
+}
+
+export type AttendanceUncheckedCreateWithoutKioskDeviceInput = {
+  id?: string
+  tenantId: string
+  employeeId: string
+  date: Date | string
+  checkIn?: Date | string | null
+  checkOut?: Date | string | null
+  checkInMethod?: $Enums.AttendanceMethod | null
+  checkOutMethod?: $Enums.AttendanceMethod | null
+  checkInLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  checkOutLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: string
+  notes?: string | null
+  confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AttendanceCreateOrConnectWithoutKioskDeviceInput = {
+  where: Prisma.AttendanceWhereUniqueInput
+  create: Prisma.XOR<Prisma.AttendanceCreateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput>
+}
+
+export type AttendanceCreateManyKioskDeviceInputEnvelope = {
+  data: Prisma.AttendanceCreateManyKioskDeviceInput | Prisma.AttendanceCreateManyKioskDeviceInput[]
+  skipDuplicates?: boolean
+}
+
+export type AttendanceUpsertWithWhereUniqueWithoutKioskDeviceInput = {
+  where: Prisma.AttendanceWhereUniqueInput
+  update: Prisma.XOR<Prisma.AttendanceUpdateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedUpdateWithoutKioskDeviceInput>
+  create: Prisma.XOR<Prisma.AttendanceCreateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedCreateWithoutKioskDeviceInput>
+}
+
+export type AttendanceUpdateWithWhereUniqueWithoutKioskDeviceInput = {
+  where: Prisma.AttendanceWhereUniqueInput
+  data: Prisma.XOR<Prisma.AttendanceUpdateWithoutKioskDeviceInput, Prisma.AttendanceUncheckedUpdateWithoutKioskDeviceInput>
+}
+
+export type AttendanceUpdateManyWithWhereWithoutKioskDeviceInput = {
+  where: Prisma.AttendanceScalarWhereInput
+  data: Prisma.XOR<Prisma.AttendanceUpdateManyMutationInput, Prisma.AttendanceUncheckedUpdateManyWithoutKioskDeviceInput>
 }
 
 export type AttendanceCreateManyEmployeeInput = {
@@ -709,6 +981,12 @@ export type AttendanceCreateManyEmployeeInput = {
   status?: string
   notes?: string | null
   confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  kioskDeviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -726,8 +1004,14 @@ export type AttendanceUpdateWithoutEmployeeInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  kioskDevice?: Prisma.KioskDeviceUpdateOneWithoutAttendancesNestedInput
 }
 
 export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
@@ -743,6 +1027,12 @@ export type AttendanceUncheckedUpdateWithoutEmployeeInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kioskDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -760,6 +1050,104 @@ export type AttendanceUncheckedUpdateManyWithoutEmployeeInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kioskDeviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AttendanceCreateManyKioskDeviceInput = {
+  id?: string
+  tenantId: string
+  employeeId: string
+  date: Date | string
+  checkIn?: Date | string | null
+  checkOut?: Date | string | null
+  checkInMethod?: $Enums.AttendanceMethod | null
+  checkOutMethod?: $Enums.AttendanceMethod | null
+  checkInLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  checkOutLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: string
+  notes?: string | null
+  confidenceScore?: number | null
+  biometricScore?: number | null
+  livenessScore?: number | null
+  challengeId?: string | null
+  deviceId?: string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type AttendanceUpdateWithoutKioskDeviceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInMethod?: Prisma.NullableEnumAttendanceMethodFieldUpdateOperationsInput | $Enums.AttendanceMethod | null
+  checkOutMethod?: Prisma.NullableEnumAttendanceMethodFieldUpdateOperationsInput | $Enums.AttendanceMethod | null
+  checkInLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  checkOutLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutAttendancesNestedInput
+}
+
+export type AttendanceUncheckedUpdateWithoutKioskDeviceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInMethod?: Prisma.NullableEnumAttendanceMethodFieldUpdateOperationsInput | $Enums.AttendanceMethod | null
+  checkOutMethod?: Prisma.NullableEnumAttendanceMethodFieldUpdateOperationsInput | $Enums.AttendanceMethod | null
+  checkInLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  checkOutLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AttendanceUncheckedUpdateManyWithoutKioskDeviceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  checkIn?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkOut?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkInMethod?: Prisma.NullableEnumAttendanceMethodFieldUpdateOperationsInput | $Enums.AttendanceMethod | null
+  checkOutMethod?: Prisma.NullableEnumAttendanceMethodFieldUpdateOperationsInput | $Enums.AttendanceMethod | null
+  checkInLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  checkOutLocation?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  confidenceScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  biometricScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  livenessScore?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  challengeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deviceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationFlags?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -780,9 +1168,16 @@ export type AttendanceSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   status?: boolean
   notes?: boolean
   confidenceScore?: boolean
+  biometricScore?: boolean
+  livenessScore?: boolean
+  challengeId?: boolean
+  deviceId?: boolean
+  kioskDeviceId?: boolean
+  verificationFlags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  kioskDevice?: boolean | Prisma.Attendance$kioskDeviceArgs<ExtArgs>
 }, ExtArgs["result"]["attendance"]>
 
 export type AttendanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -799,9 +1194,16 @@ export type AttendanceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   notes?: boolean
   confidenceScore?: boolean
+  biometricScore?: boolean
+  livenessScore?: boolean
+  challengeId?: boolean
+  deviceId?: boolean
+  kioskDeviceId?: boolean
+  verificationFlags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  kioskDevice?: boolean | Prisma.Attendance$kioskDeviceArgs<ExtArgs>
 }, ExtArgs["result"]["attendance"]>
 
 export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -818,9 +1220,16 @@ export type AttendanceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   status?: boolean
   notes?: boolean
   confidenceScore?: boolean
+  biometricScore?: boolean
+  livenessScore?: boolean
+  challengeId?: boolean
+  deviceId?: boolean
+  kioskDeviceId?: boolean
+  verificationFlags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  kioskDevice?: boolean | Prisma.Attendance$kioskDeviceArgs<ExtArgs>
 }, ExtArgs["result"]["attendance"]>
 
 export type AttendanceSelectScalar = {
@@ -837,25 +1246,35 @@ export type AttendanceSelectScalar = {
   status?: boolean
   notes?: boolean
   confidenceScore?: boolean
+  biometricScore?: boolean
+  livenessScore?: boolean
+  challengeId?: boolean
+  deviceId?: boolean
+  kioskDeviceId?: boolean
+  verificationFlags?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type AttendanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "employeeId" | "date" | "checkIn" | "checkOut" | "checkInMethod" | "checkOutMethod" | "checkInLocation" | "checkOutLocation" | "status" | "notes" | "confidenceScore" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
+export type AttendanceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "employeeId" | "date" | "checkIn" | "checkOut" | "checkInMethod" | "checkOutMethod" | "checkInLocation" | "checkOutLocation" | "status" | "notes" | "confidenceScore" | "biometricScore" | "livenessScore" | "challengeId" | "deviceId" | "kioskDeviceId" | "verificationFlags" | "createdAt" | "updatedAt", ExtArgs["result"]["attendance"]>
 export type AttendanceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  kioskDevice?: boolean | Prisma.Attendance$kioskDeviceArgs<ExtArgs>
 }
 export type AttendanceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  kioskDevice?: boolean | Prisma.Attendance$kioskDeviceArgs<ExtArgs>
 }
 export type AttendanceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  kioskDevice?: boolean | Prisma.Attendance$kioskDeviceArgs<ExtArgs>
 }
 
 export type $AttendancePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Attendance"
   objects: {
     employee: Prisma.$EmployeePayload<ExtArgs>
+    kioskDevice: Prisma.$KioskDevicePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -871,6 +1290,12 @@ export type $AttendancePayload<ExtArgs extends runtime.Types.Extensions.Internal
     status: string
     notes: string | null
     confidenceScore: number | null
+    biometricScore: number | null
+    livenessScore: number | null
+    challengeId: string | null
+    deviceId: string | null
+    kioskDeviceId: string | null
+    verificationFlags: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["attendance"]>
@@ -1268,6 +1693,7 @@ readonly fields: AttendanceFieldRefs;
 export interface Prisma__AttendanceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   employee<T extends Prisma.EmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  kioskDevice<T extends Prisma.Attendance$kioskDeviceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attendance$kioskDeviceArgs<ExtArgs>>): Prisma.Prisma__KioskDeviceClient<runtime.Types.Result.GetResult<Prisma.$KioskDevicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1310,6 +1736,12 @@ export interface AttendanceFieldRefs {
   readonly status: Prisma.FieldRef<"Attendance", 'String'>
   readonly notes: Prisma.FieldRef<"Attendance", 'String'>
   readonly confidenceScore: Prisma.FieldRef<"Attendance", 'Float'>
+  readonly biometricScore: Prisma.FieldRef<"Attendance", 'Float'>
+  readonly livenessScore: Prisma.FieldRef<"Attendance", 'Float'>
+  readonly challengeId: Prisma.FieldRef<"Attendance", 'String'>
+  readonly deviceId: Prisma.FieldRef<"Attendance", 'String'>
+  readonly kioskDeviceId: Prisma.FieldRef<"Attendance", 'String'>
+  readonly verificationFlags: Prisma.FieldRef<"Attendance", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Attendance", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Attendance", 'DateTime'>
 }
@@ -1710,6 +2142,25 @@ export type AttendanceDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Attendances to delete.
    */
   limit?: number
+}
+
+/**
+ * Attendance.kioskDevice
+ */
+export type Attendance$kioskDeviceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the KioskDevice
+   */
+  select?: Prisma.KioskDeviceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the KioskDevice
+   */
+  omit?: Prisma.KioskDeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.KioskDeviceInclude<ExtArgs> | null
+  where?: Prisma.KioskDeviceWhereInput
 }
 
 /**

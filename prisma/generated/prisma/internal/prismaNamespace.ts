@@ -411,7 +411,13 @@ export const ModelName = {
   SalaryComponent: 'SalaryComponent',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
-  File: 'File'
+  File: 'File',
+  BiometricTemplate: 'BiometricTemplate',
+  Device: 'Device',
+  KioskDevice: 'KioskDevice',
+  GeofenceZone: 'GeofenceZone',
+  Beacon: 'Beacon',
+  ShiftRosterDaily: 'ShiftRosterDaily'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -427,7 +433,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "tenantSettings" | "subscription" | "invoice" | "user" | "role" | "userRole" | "organization" | "branch" | "department" | "employee" | "employeeDocument" | "contract" | "emergencyContact" | "attendance" | "schedule" | "shift" | "scheduleAssignment" | "leaveType" | "leaveBalance" | "leaveRequest" | "payrollRun" | "payslip" | "salaryStructure" | "salaryComponent" | "notification" | "auditLog" | "file"
+    modelProps: "tenant" | "tenantSettings" | "subscription" | "invoice" | "user" | "role" | "userRole" | "organization" | "branch" | "department" | "employee" | "employeeDocument" | "contract" | "emergencyContact" | "attendance" | "schedule" | "shift" | "scheduleAssignment" | "leaveType" | "leaveBalance" | "leaveRequest" | "payrollRun" | "payslip" | "salaryStructure" | "salaryComponent" | "notification" | "auditLog" | "file" | "biometricTemplate" | "device" | "kioskDevice" | "geofenceZone" | "beacon" | "shiftRosterDaily"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2503,6 +2509,450 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BiometricTemplate: {
+      payload: Prisma.$BiometricTemplatePayload<ExtArgs>
+      fields: Prisma.BiometricTemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BiometricTemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BiometricTemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.BiometricTemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BiometricTemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>
+        }
+        findMany: {
+          args: Prisma.BiometricTemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>[]
+        }
+        create: {
+          args: Prisma.BiometricTemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>
+        }
+        createMany: {
+          args: Prisma.BiometricTemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BiometricTemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.BiometricTemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>
+        }
+        update: {
+          args: Prisma.BiometricTemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.BiometricTemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BiometricTemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BiometricTemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.BiometricTemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BiometricTemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.BiometricTemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBiometricTemplate>
+        }
+        groupBy: {
+          args: Prisma.BiometricTemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BiometricTemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BiometricTemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BiometricTemplateCountAggregateOutputType> | number
+        }
+      }
+    }
+    Device: {
+      payload: Prisma.$DevicePayload<ExtArgs>
+      fields: Prisma.DeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        findFirst: {
+          args: Prisma.DeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        findMany: {
+          args: Prisma.DeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>[]
+        }
+        create: {
+          args: Prisma.DeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        createMany: {
+          args: Prisma.DeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>[]
+        }
+        delete: {
+          args: Prisma.DeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        update: {
+          args: Prisma.DeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.DeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.DeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        aggregate: {
+          args: Prisma.DeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDevice>
+        }
+        groupBy: {
+          args: Prisma.DeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceCountAggregateOutputType> | number
+        }
+      }
+    }
+    KioskDevice: {
+      payload: Prisma.$KioskDevicePayload<ExtArgs>
+      fields: Prisma.KioskDeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.KioskDeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.KioskDeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>
+        }
+        findFirst: {
+          args: Prisma.KioskDeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.KioskDeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>
+        }
+        findMany: {
+          args: Prisma.KioskDeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>[]
+        }
+        create: {
+          args: Prisma.KioskDeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>
+        }
+        createMany: {
+          args: Prisma.KioskDeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.KioskDeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>[]
+        }
+        delete: {
+          args: Prisma.KioskDeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>
+        }
+        update: {
+          args: Prisma.KioskDeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.KioskDeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.KioskDeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.KioskDeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.KioskDeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$KioskDevicePayload>
+        }
+        aggregate: {
+          args: Prisma.KioskDeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateKioskDevice>
+        }
+        groupBy: {
+          args: Prisma.KioskDeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KioskDeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.KioskDeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.KioskDeviceCountAggregateOutputType> | number
+        }
+      }
+    }
+    GeofenceZone: {
+      payload: Prisma.$GeofenceZonePayload<ExtArgs>
+      fields: Prisma.GeofenceZoneFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GeofenceZoneFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GeofenceZoneFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>
+        }
+        findFirst: {
+          args: Prisma.GeofenceZoneFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GeofenceZoneFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>
+        }
+        findMany: {
+          args: Prisma.GeofenceZoneFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>[]
+        }
+        create: {
+          args: Prisma.GeofenceZoneCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>
+        }
+        createMany: {
+          args: Prisma.GeofenceZoneCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GeofenceZoneCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>[]
+        }
+        delete: {
+          args: Prisma.GeofenceZoneDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>
+        }
+        update: {
+          args: Prisma.GeofenceZoneUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>
+        }
+        deleteMany: {
+          args: Prisma.GeofenceZoneDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GeofenceZoneUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GeofenceZoneUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>[]
+        }
+        upsert: {
+          args: Prisma.GeofenceZoneUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GeofenceZonePayload>
+        }
+        aggregate: {
+          args: Prisma.GeofenceZoneAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGeofenceZone>
+        }
+        groupBy: {
+          args: Prisma.GeofenceZoneGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GeofenceZoneGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GeofenceZoneCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GeofenceZoneCountAggregateOutputType> | number
+        }
+      }
+    }
+    Beacon: {
+      payload: Prisma.$BeaconPayload<ExtArgs>
+      fields: Prisma.BeaconFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BeaconFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BeaconFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>
+        }
+        findFirst: {
+          args: Prisma.BeaconFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BeaconFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>
+        }
+        findMany: {
+          args: Prisma.BeaconFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>[]
+        }
+        create: {
+          args: Prisma.BeaconCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>
+        }
+        createMany: {
+          args: Prisma.BeaconCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BeaconCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>[]
+        }
+        delete: {
+          args: Prisma.BeaconDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>
+        }
+        update: {
+          args: Prisma.BeaconUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>
+        }
+        deleteMany: {
+          args: Prisma.BeaconDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BeaconUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BeaconUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>[]
+        }
+        upsert: {
+          args: Prisma.BeaconUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BeaconPayload>
+        }
+        aggregate: {
+          args: Prisma.BeaconAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBeacon>
+        }
+        groupBy: {
+          args: Prisma.BeaconGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BeaconGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BeaconCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BeaconCountAggregateOutputType> | number
+        }
+      }
+    }
+    ShiftRosterDaily: {
+      payload: Prisma.$ShiftRosterDailyPayload<ExtArgs>
+      fields: Prisma.ShiftRosterDailyFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ShiftRosterDailyFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ShiftRosterDailyFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>
+        }
+        findFirst: {
+          args: Prisma.ShiftRosterDailyFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ShiftRosterDailyFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>
+        }
+        findMany: {
+          args: Prisma.ShiftRosterDailyFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>[]
+        }
+        create: {
+          args: Prisma.ShiftRosterDailyCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>
+        }
+        createMany: {
+          args: Prisma.ShiftRosterDailyCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ShiftRosterDailyCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>[]
+        }
+        delete: {
+          args: Prisma.ShiftRosterDailyDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>
+        }
+        update: {
+          args: Prisma.ShiftRosterDailyUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>
+        }
+        deleteMany: {
+          args: Prisma.ShiftRosterDailyDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ShiftRosterDailyUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ShiftRosterDailyUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>[]
+        }
+        upsert: {
+          args: Prisma.ShiftRosterDailyUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ShiftRosterDailyPayload>
+        }
+        aggregate: {
+          args: Prisma.ShiftRosterDailyAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateShiftRosterDaily>
+        }
+        groupBy: {
+          args: Prisma.ShiftRosterDailyGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ShiftRosterDailyGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ShiftRosterDailyCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ShiftRosterDailyCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2780,6 +3230,12 @@ export const AttendanceScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   confidenceScore: 'confidenceScore',
+  biometricScore: 'biometricScore',
+  livenessScore: 'livenessScore',
+  challengeId: 'challengeId',
+  deviceId: 'deviceId',
+  kioskDeviceId: 'kioskDeviceId',
+  verificationFlags: 'verificationFlags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2807,6 +3263,10 @@ export const ShiftScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   isWorkingDay: 'isWorkingDay',
+  graceMinutesIn: 'graceMinutesIn',
+  graceMinutesOut: 'graceMinutesOut',
+  breakMinutes: 'breakMinutes',
+  isNightShift: 'isNightShift',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2984,6 +3444,106 @@ export const FileScalarFieldEnum = {
 } as const
 
 export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
+
+
+export const BiometricTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  type: 'type',
+  vectorData: 'vectorData',
+  algorithmVersion: 'algorithmVersion',
+  qualityScore: 'qualityScore',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BiometricTemplateScalarFieldEnum = (typeof BiometricTemplateScalarFieldEnum)[keyof typeof BiometricTemplateScalarFieldEnum]
+
+
+export const DeviceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  deviceUuid: 'deviceUuid',
+  deviceModel: 'deviceModel',
+  platform: 'platform',
+  osVersion: 'osVersion',
+  appVersion: 'appVersion',
+  publicKey: 'publicKey',
+  isTrusted: 'isTrusted',
+  isJailbroken: 'isJailbroken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
+
+
+export const KioskDeviceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  deviceUuid: 'deviceUuid',
+  publicKey: 'publicKey',
+  status: 'status',
+  lastHeartbeatAt: 'lastHeartbeatAt',
+  batteryLevel: 'batteryLevel',
+  appVersion: 'appVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type KioskDeviceScalarFieldEnum = (typeof KioskDeviceScalarFieldEnum)[keyof typeof KioskDeviceScalarFieldEnum]
+
+
+export const GeofenceZoneScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  zoneType: 'zoneType',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  radiusMeters: 'radiusMeters',
+  polygonCoords: 'polygonCoords',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GeofenceZoneScalarFieldEnum = (typeof GeofenceZoneScalarFieldEnum)[keyof typeof GeofenceZoneScalarFieldEnum]
+
+
+export const BeaconScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  uuid: 'uuid',
+  major: 'major',
+  minor: 'minor',
+  rssiThreshold: 'rssiThreshold',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BeaconScalarFieldEnum = (typeof BeaconScalarFieldEnum)[keyof typeof BeaconScalarFieldEnum]
+
+
+export const ShiftRosterDailyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  shiftId: 'shiftId',
+  date: 'date',
+  isOffDay: 'isOffDay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShiftRosterDailyScalarFieldEnum = (typeof ShiftRosterDailyScalarFieldEnum)[keyof typeof ShiftRosterDailyScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -3256,6 +3816,20 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
 
+
+/**
+ * Reference to a field of type 'BiometricType'
+ */
+export type EnumBiometricTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BiometricType'>
+    
+
+
+/**
+ * Reference to a field of type 'BiometricType[]'
+ */
+export type ListEnumBiometricTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BiometricType[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -3394,6 +3968,12 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   auditLog?: Prisma.AuditLogOmit
   file?: Prisma.FileOmit
+  biometricTemplate?: Prisma.BiometricTemplateOmit
+  device?: Prisma.DeviceOmit
+  kioskDevice?: Prisma.KioskDeviceOmit
+  geofenceZone?: Prisma.GeofenceZoneOmit
+  beacon?: Prisma.BeaconOmit
+  shiftRosterDaily?: Prisma.ShiftRosterDailyOmit
 }
 
 /* Types for Logging */

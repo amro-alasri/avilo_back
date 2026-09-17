@@ -51,4 +51,55 @@ export class OrganizationsController {
   findAllDepartments(@TenantId() tenantId: string, @Query('branchId') branchId?: string) {
     return this.orgService.findAllDepartments(tenantId, branchId);
   }
+
+  // --- Geofence Zones ---
+  @Post('branches/:branchId/geofences')
+  addGeofenceZone(
+    @TenantId() tenantId: string,
+    @Param('branchId') branchId: string,
+    @Body() dto: any,
+  ) {
+    return this.orgService.addGeofenceZone(tenantId, branchId, dto);
+  }
+
+  @Delete('geofences/:zoneId')
+  deleteGeofenceZone(@TenantId() tenantId: string, @Param('zoneId') zoneId: string) {
+    return this.orgService.deleteGeofenceZone(tenantId, zoneId);
+  }
+
+  // --- BLE Beacons ---
+  @Post('branches/:branchId/beacons')
+  addBeacon(
+    @TenantId() tenantId: string,
+    @Param('branchId') branchId: string,
+    @Body() dto: any,
+  ) {
+    return this.orgService.addBeacon(tenantId, branchId, dto);
+  }
+
+  @Delete('beacons/:beaconId')
+  deleteBeacon(@TenantId() tenantId: string, @Param('beaconId') beaconId: string) {
+    return this.orgService.deleteBeacon(tenantId, beaconId);
+  }
+
+  // --- Kiosk Devices ---
+  @Get('kiosks')
+  getKioskDevices(@TenantId() tenantId: string, @Query('branchId') branchId?: string) {
+    return this.orgService.getKioskDevices(tenantId, branchId);
+  }
+
+  @Post('branches/:branchId/kiosks')
+  addKioskDevice(
+    @TenantId() tenantId: string,
+    @Param('branchId') branchId: string,
+    @Body() dto: { name: string; deviceUuid: string; appVersion?: string },
+  ) {
+    return this.orgService.addKioskDevice(tenantId, branchId, dto);
+  }
+
+  @Delete('kiosks/:kioskId')
+  deleteKioskDevice(@TenantId() tenantId: string, @Param('kioskId') kioskId: string) {
+    return this.orgService.deleteKioskDevice(tenantId, kioskId);
+  }
 }
+

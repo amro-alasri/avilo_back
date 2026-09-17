@@ -221,30 +221,81 @@ export class EmployeesService {
   async findOne(tenantId: string, id: string) {
     const employee = await this.prisma.employee.findFirst({
       where: { id, tenantId },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        employeeNumber: true,
-        status: true,
-        createdAt: true,
-        jobTitle: true,
-        joinDate: true,
-        birthDate: true,
-        gender: true,
-        phone: true,
-        departmentId: true,
-        branchId: true,
-        department: true,
-        branch: true,
+      include: {
+        department: {
+          select: { id: true, name: true, code: true, branch: { select: { id: true, name: true } } },
+        },
+        branch: {
+          select: { id: true, name: true, code: true, address: true },
+        },
+        emergencyContacts: true,
+        contracts: {
+          orderBy: { startDate: 'desc' },
+          take: 5,
+        },
+        biometricTemplates: {
+          where: { isActive: true },
+          select: {
+            id: true,
+            type: true,
+            algorithmVersion: true,
+            qualityScore: true,
+            isActive: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        devices: {
+          orderBy: { createdAt: 'desc' },
+        },
+        attendances: {
+          orderBy: { date: 'desc' },
+          take: 30,
+        },
+        leaveBalances: {
+          include: { leaveType: true },
+        },
+        leaveRequests: {
+          orderBy: { createdAt: 'desc' },
+          take: 20,
+          include: { leaveType: true },
+        },
+        salaryStructures: {
+          orderBy: { effectiveDate: 'desc' },
+          take: 1,
+          include: { components: true },
+        },
+        payslips: {
+          orderBy: { createdAt: 'desc' },
+          take: 12,
+          include: { payrollRun: true },
+        },
       },
     });
 
     if (!employee) {
       throw new NotFoundException('Employee not found');
     }
-    return employee;
+
+    const { password, ...safeEmployee } = employee;
+    return safeEmployee;
+  }
+
+  async resetBiometricTemplate(tenantId: string, id: string) {
+    await this.findOne(tenantId, id);
+
+    await this.prisma.biometricTemplate.updateMany({
+      where: {
+        tenantId,
+        employeeId: id,
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
+    });
+
+    return { success: true, message: 'Face biometric template reset successfully' };
   }
 
   async update(tenantId: string, id: string, dto: UpdateEmployeeDto) {

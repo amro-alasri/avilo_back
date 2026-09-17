@@ -265,6 +265,9 @@ model Branch {
   
   departments     Department[]
   employees       Employee[]
+  geofenceZones   GeofenceZone[]
+  beacons         Beacon[]
+  kioskDevices    KioskDevice[]
 
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -325,6 +328,9 @@ model Employee {
   scheduleAssignments ScheduleAssignment[]
   payslips        Payslip[]
   salaryStructures SalaryStructure[]
+  biometricTemplates BiometricTemplate[]
+  devices         Device[]
+  shiftRosters    ShiftRosterDaily[]
 
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
@@ -413,6 +419,14 @@ model Attendance {
   status          String           @default("present") // present, late, absent, half_day
   notes           String?
   confidenceScore Float?           @map("confidence_score") // Score from 0 to 100
+
+  biometricScore  Float?           @map("biometric_score")
+  livenessScore   Float?           @map("liveness_score")
+  challengeId     String?          @map("challenge_id")
+  deviceId        String?          @map("device_id")
+  kioskDeviceId   String?          @map("kiosk_device_id")
+  kioskDevice     KioskDevice?     @relation(fields: [kioskDeviceId], references: [id], onDelete: SetNull)
+  verificationFlags Json?          @map("verification_flags")
   
   createdAt       DateTime         @default(now()) @map("created_at")
   updatedAt       DateTime         @updatedAt @map("updated_at")
@@ -420,6 +434,7 @@ model Attendance {
   @@index([tenantId])
   @@index([employeeId])
   @@index([date])
+  @@index([kioskDeviceId])
   @@map("attendances")
 }
 
@@ -452,6 +467,12 @@ model Shift {
   endTime         String   @map("end_time") // HH:mm format
   isWorkingDay    Boolean  @default(true) @map("is_working_day")
   
+  graceMinutesIn  Int      @default(15) @map("grace_minutes_in")
+  graceMinutesOut Int      @default(0) @map("grace_minutes_out")
+  breakMinutes    Int      @default(60) @map("break_minutes")
+  isNightShift    Boolean  @default(false) @map("is_night_shift")
+  rosters         ShiftRosterDaily[]
+
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
@@ -690,4 +711,143 @@ model File {
 
   @@index([tenantId])
   @@map("files")
+}
+
+enum BiometricType {
+  face_arcface_512
+  voice_ecapa_192
+}
+
+model BiometricTemplate {
+  id               String        @id @default(uuid())
+  tenantId         String        @map("tenant_id")
+  employeeId       String        @map("employee_id")
+  type             BiometricType @default(face_arcface_512)
+  
+  vectorData       Json          @map("vector_data")
+  algorithmVersion String        @default("arcface_v1") @map("algorithm_version")
+  qualityScore     Float         @default(1.0) @map("quality_score")
+  isActive         Boolean       @default(true) @map("is_active")
+  
+  employee         Employee      @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@index([employeeId, type])
+  @@map("biometric_templates")
+}
+
+model Device {
+  id           String    @id @default(uuid())
+  tenantId     String    @map("tenant_id")
+  employeeId   String    @map("employee_id")
+  
+  deviceUuid   String    @map("device_uuid")
+  deviceModel  String?   @map("device_model")
+  platform     String    // ios, android
+  osVersion    String?   @map("os_version")
+  appVersion   String?   @map("app_version")
+  publicKey    String?   @map("public_key")
+  isTrusted    Boolean   @default(true) @map("is_trusted")
+  isJailbroken Boolean   @default(false) @map("is_jailbroken")
+  
+  employee     Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  @@unique([tenantId, deviceUuid])
+  @@index([employeeId])
+  @@map("devices")
+}
+
+model KioskDevice {
+  id              String       @id @default(uuid())
+  tenantId        String       @map("tenant_id")
+  branchId        String       @map("branch_id")
+  
+  name            String
+  deviceUuid      String       @unique @map("device_uuid")
+  publicKey       String?      @map("public_key")
+  status          String       @default("active") // active, suspended, maintenance
+  lastHeartbeatAt DateTime?    @map("last_heartbeat_at")
+  batteryLevel    Int?         @map("battery_level")
+  appVersion      String?      @map("app_version")
+  
+  branch          Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  attendances     Attendance[]
+
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@index([branchId])
+  @@map("kiosk_devices")
+}
+
+model GeofenceZone {
+  id            String   @id @default(uuid())
+  tenantId      String   @map("tenant_id")
+  branchId      String   @map("branch_id")
+  
+  name          String
+  zoneType      String   @default("circle") @map("zone_type") // circle, polygon
+  latitude      Float?
+  longitude     Float?
+  radiusMeters  Int?     @map("radius_meters")
+  polygonCoords Json?    @map("polygon_coords")
+  
+  branch        Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@index([branchId])
+  @@map("geofence_zones")
+}
+
+model Beacon {
+  id            String   @id @default(uuid())
+  tenantId      String   @map("tenant_id")
+  branchId      String   @map("branch_id")
+  
+  name          String
+  uuid          String
+  major         Int
+  minor         Int
+  rssiThreshold Int      @default(-85) @map("rssi_threshold")
+  
+  branch        Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@unique([uuid, major, minor])
+  @@index([tenantId])
+  @@index([branchId])
+  @@map("beacons")
+}
+
+model ShiftRosterDaily {
+  id         String   @id @default(uuid())
+  tenantId   String   @map("tenant_id")
+  employeeId String   @map("employee_id")
+  shiftId    String   @map("shift_id")
+  date       DateTime @db.Date
+  isOffDay   Boolean  @default(false) @map("is_off_day")
+
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  shift      Shift    @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, employeeId, date])
+  @@index([employeeId])
+  @@index([shiftId])
+  @@index([date])
+  @@map("shift_rosters_daily")
 }

@@ -528,6 +528,23 @@ export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
 }
 
+export type EnumBiometricTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BiometricType | Prisma.EnumBiometricTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBiometricTypeFilter<$PrismaModel> | $Enums.BiometricType
+}
+
+export type EnumBiometricTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BiometricType | Prisma.EnumBiometricTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBiometricTypeWithAggregatesFilter<$PrismaModel> | $Enums.BiometricType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBiometricTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBiometricTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -977,6 +994,23 @@ export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumBiometricTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.BiometricType | Prisma.EnumBiometricTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBiometricTypeFilter<$PrismaModel> | $Enums.BiometricType
+}
+
+export type NestedEnumBiometricTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.BiometricType | Prisma.EnumBiometricTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.BiometricType[] | Prisma.ListEnumBiometricTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumBiometricTypeWithAggregatesFilter<$PrismaModel> | $Enums.BiometricType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumBiometricTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumBiometricTypeFilter<$PrismaModel>
 }
 
 

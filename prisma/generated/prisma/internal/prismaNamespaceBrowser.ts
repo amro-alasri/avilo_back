@@ -78,7 +78,13 @@ export const ModelName = {
   SalaryComponent: 'SalaryComponent',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
-  File: 'File'
+  File: 'File',
+  BiometricTemplate: 'BiometricTemplate',
+  Device: 'Device',
+  KioskDevice: 'KioskDevice',
+  GeofenceZone: 'GeofenceZone',
+  Beacon: 'Beacon',
+  ShiftRosterDaily: 'ShiftRosterDaily'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -335,6 +341,12 @@ export const AttendanceScalarFieldEnum = {
   status: 'status',
   notes: 'notes',
   confidenceScore: 'confidenceScore',
+  biometricScore: 'biometricScore',
+  livenessScore: 'livenessScore',
+  challengeId: 'challengeId',
+  deviceId: 'deviceId',
+  kioskDeviceId: 'kioskDeviceId',
+  verificationFlags: 'verificationFlags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -362,6 +374,10 @@ export const ShiftScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   isWorkingDay: 'isWorkingDay',
+  graceMinutesIn: 'graceMinutesIn',
+  graceMinutesOut: 'graceMinutesOut',
+  breakMinutes: 'breakMinutes',
+  isNightShift: 'isNightShift',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -539,6 +555,106 @@ export const FileScalarFieldEnum = {
 } as const
 
 export type FileScalarFieldEnum = (typeof FileScalarFieldEnum)[keyof typeof FileScalarFieldEnum]
+
+
+export const BiometricTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  type: 'type',
+  vectorData: 'vectorData',
+  algorithmVersion: 'algorithmVersion',
+  qualityScore: 'qualityScore',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BiometricTemplateScalarFieldEnum = (typeof BiometricTemplateScalarFieldEnum)[keyof typeof BiometricTemplateScalarFieldEnum]
+
+
+export const DeviceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  deviceUuid: 'deviceUuid',
+  deviceModel: 'deviceModel',
+  platform: 'platform',
+  osVersion: 'osVersion',
+  appVersion: 'appVersion',
+  publicKey: 'publicKey',
+  isTrusted: 'isTrusted',
+  isJailbroken: 'isJailbroken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
+
+
+export const KioskDeviceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  deviceUuid: 'deviceUuid',
+  publicKey: 'publicKey',
+  status: 'status',
+  lastHeartbeatAt: 'lastHeartbeatAt',
+  batteryLevel: 'batteryLevel',
+  appVersion: 'appVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type KioskDeviceScalarFieldEnum = (typeof KioskDeviceScalarFieldEnum)[keyof typeof KioskDeviceScalarFieldEnum]
+
+
+export const GeofenceZoneScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  zoneType: 'zoneType',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  radiusMeters: 'radiusMeters',
+  polygonCoords: 'polygonCoords',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GeofenceZoneScalarFieldEnum = (typeof GeofenceZoneScalarFieldEnum)[keyof typeof GeofenceZoneScalarFieldEnum]
+
+
+export const BeaconScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  branchId: 'branchId',
+  name: 'name',
+  uuid: 'uuid',
+  major: 'major',
+  minor: 'minor',
+  rssiThreshold: 'rssiThreshold',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BeaconScalarFieldEnum = (typeof BeaconScalarFieldEnum)[keyof typeof BeaconScalarFieldEnum]
+
+
+export const ShiftRosterDailyScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  employeeId: 'employeeId',
+  shiftId: 'shiftId',
+  date: 'date',
+  isOffDay: 'isOffDay',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ShiftRosterDailyScalarFieldEnum = (typeof ShiftRosterDailyScalarFieldEnum)[keyof typeof ShiftRosterDailyScalarFieldEnum]
 
 
 export const SortOrder = {

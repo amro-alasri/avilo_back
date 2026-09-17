@@ -179,3 +179,33 @@ export type AuditLog = Prisma.AuditLogModel
  * 
  */
 export type File = Prisma.FileModel
+/**
+ * Model BiometricTemplate
+ * 
+ */
+export type BiometricTemplate = Prisma.BiometricTemplateModel
+/**
+ * Model Device
+ * 
+ */
+export type Device = Prisma.DeviceModel
+/**
+ * Model KioskDevice
+ * 
+ */
+export type KioskDevice = Prisma.KioskDeviceModel
+/**
+ * Model GeofenceZone
+ * 
+ */
+export type GeofenceZone = Prisma.GeofenceZoneModel
+/**
+ * Model Beacon
+ * 
+ */
+export type Beacon = Prisma.BeaconModel
+/**
+ * Model ShiftRosterDaily
+ * 
+ */
+export type ShiftRosterDaily = Prisma.ShiftRosterDailyModel
