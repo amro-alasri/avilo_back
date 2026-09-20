@@ -47,45 +47,61 @@ export class FaceVerificationService {
     if (!dto.employeeId) {
       throw new BadRequestException('Employee ID is required for biometric enrollment');
     }
-    const employeeId = dto.employeeId;
+    const rawId = dto.employeeId;
+    const employeeId = typeof rawId === 'object' 
+      ? (rawId as any)?.userId || (rawId as any)?.sub || (rawId as any)?.id 
+      : String(rawId);
 
-    const employee = await this.prisma.employee.findUnique({
-      where: { id: employeeId },
+    const employee = await this.prisma.employee.findFirst({
+      where: {
+        OR: [
+          { id: employeeId },
+          { email: employeeId },
+        ],
+      },
     });
 
-    if (!employee || employee.tenantId !== tenantId) {
+    if (!employee || (tenantId && employee.tenantId !== tenantId)) {
       throw new NotFoundException('Employee not found in this organization');
     }
 
-    // Deactivate previous active templates of the same type for this employee
-    await this.prisma.biometricTemplate.updateMany({
-      where: {
-        employeeId,
-        type: dto.type || BiometricType.face_arcface_512,
-        isActive: true,
-      },
-      data: { isActive: false },
-    });
+    const actualEmployeeId = employee.id;
+    const actualTenantId = employee.tenantId || tenantId;
 
-    // Create new master template
-    const template = await this.prisma.biometricTemplate.create({
-      data: {
-        tenantId,
-        employeeId,
-        type: dto.type || BiometricType.face_arcface_512,
-        vectorData: dto.vector,
-        qualityScore: dto.qualityScore ?? 1.0,
-        isActive: true,
-      },
-    });
+    try {
+      // Deactivate previous active templates of the same type for this employee
+      await this.prisma.biometricTemplate.updateMany({
+        where: {
+          employeeId: actualEmployeeId,
+          type: (dto.type as any) || BiometricType.face_arcface_512,
+          isActive: true,
+        },
+        data: { isActive: false },
+      });
 
-    this.logger.log(`Successfully enrolled biometric template for employee ${employee.id}`);
-    return {
-      success: true,
-      templateId: template.id,
-      algorithmVersion: template.algorithmVersion,
-      enrolledAt: template.createdAt,
-    };
+      // Create new master template - wrap in object to ensure pg serializes as JSON rather than Postgres native array
+      const template = await this.prisma.biometricTemplate.create({
+        data: {
+          tenantId: actualTenantId,
+          employeeId: actualEmployeeId,
+          type: (dto.type as any) || BiometricType.face_arcface_512,
+          vectorData: { vector: dto.vector, length: dto.vector.length },
+          qualityScore: dto.qualityScore ?? 1.0,
+          isActive: true,
+        },
+      });
+
+      this.logger.log(`Successfully enrolled biometric template for employee ${actualEmployeeId}`);
+      return {
+        success: true,
+        templateId: template.id,
+        algorithmVersion: template.algorithmVersion,
+        enrolledAt: template.createdAt,
+      };
+    } catch (error: any) {
+      this.logger.error(`Failed to persist biometric template: ${error.message}`, error.stack);
+      throw new BadRequestException(`فشل حفظ بصمة الوجه في قاعدة البيانات: ${error.message}`);
+    }
   }
 
   /**
@@ -123,7 +139,22 @@ export class FaceVerificationService {
       };
     }
 
-    const referenceVector = template.vectorData as number[];
+    // Safely extract reference vector from various JSON storage representations
+    let referenceVector: number[] = [];
+    const rawData = template.vectorData as any;
+    if (Array.isArray(rawData)) {
+      referenceVector = rawData;
+    } else if (rawData && Array.isArray(rawData.vector)) {
+      referenceVector = rawData.vector;
+    } else if (typeof rawData === 'string') {
+      try {
+        const parsed = JSON.parse(rawData);
+        referenceVector = Array.isArray(parsed) ? parsed : (parsed?.vector || []);
+      } catch {
+        referenceVector = [];
+      }
+    }
+
     const similarity = this.computeCosineSimilarity(referenceVector, liveEmbedding);
 
     this.logger.debug(

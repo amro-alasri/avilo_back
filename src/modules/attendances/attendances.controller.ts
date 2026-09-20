@@ -17,14 +17,21 @@ export class AttendancesController {
     private readonly redis: RedisService,
   ) {}
 
+  private resolveUserId(user: any): string {
+    if (typeof user === 'object' && user !== null) {
+      return user.userId || user.sub || user.id || '';
+    }
+    return String(user || '');
+  }
+
   @Post('check-in')
   async checkIn(@CurrentUser('userId') userId: string, @TenantId() tenantId: string, @Body() dto: CheckInDto) {
-    return this.attendancesService.checkIn(userId, tenantId, dto);
+    return this.attendancesService.checkIn(this.resolveUserId(userId), tenantId, dto);
   }
 
   @Post('check-out')
   async checkOut(@CurrentUser('userId') userId: string, @TenantId() tenantId: string, @Body() dto: CheckOutDto) {
-    return this.attendancesService.checkOut(userId, tenantId, dto);
+    return this.attendancesService.checkOut(this.resolveUserId(userId), tenantId, dto);
   }
 
   // --- Biometric Endpoints ---
@@ -34,7 +41,7 @@ export class AttendancesController {
     @CurrentUser('userId') userId: string,
     @TenantId() tenantId: string,
   ) {
-    return this.attendancesService.getBiometricStatus(userId, tenantId);
+    return this.attendancesService.getBiometricStatus(this.resolveUserId(userId), tenantId);
   }
 
   @Post('biometrics/challenge')
@@ -43,17 +50,19 @@ export class AttendancesController {
     @TenantId() tenantId: string,
     @Body() _dto: RequestChallengeDto,
   ) {
-    return this.attendancesService.requestBiometricChallenge(userId, tenantId);
+    return this.attendancesService.requestBiometricChallenge(this.resolveUserId(userId), tenantId);
   }
 
   @Post('biometrics/enroll')
   async enrollBiometric(
-    @CurrentUser('userId') userId: string,
+    @CurrentUser() user: any,
     @TenantId() tenantId: string,
     @Body() dto: EnrollBiometricDto,
   ) {
-    const targetEmployeeId = dto.employeeId || userId;
-    return this.attendancesService.enrollBiometricTemplate(tenantId, {
+    const resolvedUserId = this.resolveUserId(user);
+    const resolvedTenantId = tenantId || user?.tenantId;
+    const targetEmployeeId = dto.employeeId || resolvedUserId;
+    return this.attendancesService.enrollBiometricTemplate(resolvedTenantId, {
       ...dto,
       employeeId: targetEmployeeId,
     });
@@ -65,7 +74,7 @@ export class AttendancesController {
     @TenantId() tenantId: string,
     @Body() dto: VerifyBiometricDto,
   ) {
-    return this.attendancesService.verifyBiometric(userId, tenantId, dto);
+    return this.attendancesService.verifyBiometric(this.resolveUserId(userId), tenantId, dto);
   }
 
   // --- Tablet Kiosk Station Endpoints ---
@@ -137,7 +146,7 @@ export class AttendancesController {
 
   @Get('me/today')
   async getMyTodayAttendance(@CurrentUser('userId') userId: string, @TenantId() tenantId: string) {
-    return this.attendancesService.getMyTodayAttendance(userId, tenantId);
+    return this.attendancesService.getMyTodayAttendance(this.resolveUserId(userId), tenantId);
   }
 
   @Get()

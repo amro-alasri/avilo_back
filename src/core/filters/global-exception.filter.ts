@@ -19,8 +19,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       message = typeof res === 'string' ? { message: res } : res;
     } else if (exception instanceof Error) {
       this.logger.error(`Exception: ${exception.message}`, exception.stack);
-      message = { message: 'Internal server error' };
-      // In development, you might expose exception.message
+      message = { 
+        message: exception.message || 'Internal server error',
+        error: exception.name,
+      };
     }
 
     const errorResponse = {
