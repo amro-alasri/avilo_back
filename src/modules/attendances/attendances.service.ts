@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service.js';
 import { CheckInDto, CheckOutDto } from './dto/attendance.dto.js';
 import { EnrollBiometricDto, VerifyBiometricDto } from './dto/biometrics.dto.js';
@@ -168,7 +168,42 @@ export class AttendancesService {
     let biometricScore: number | undefined;
     const verificationFlags: Record<string, any> = {};
 
-    // 1. Biometric Pipeline Verification (if payload provided)
+    // 0. Trusted Device Binding Verification (Anti-Buddy Punching)
+    if (dto.deviceUuid) {
+      const trustedDevice = await this.prisma.device.findFirst({
+        where: {
+          employeeId: employee.id,
+          isTrusted: true,
+        },
+      });
+      if (trustedDevice && trustedDevice.deviceUuid !== dto.deviceUuid) {
+        throw new ForbiddenException({
+          statusCode: 403,
+          error: 'DEVICE_BOUND_TO_ANOTHER_PHONE',
+          message: 'Attendance punch must be recorded from your registered trusted device.',
+        });
+      }
+      verificationFlags.deviceUuid = dto.deviceUuid;
+      verificationFlags.deviceModel = trustedDevice?.deviceModel;
+    }
+
+    // 1. Device Hardware Biometrics (Fingerprint / Face ID confirmed on device)
+    const isDeviceBiometric =
+      dto.deviceBiometricConfirmed === true ||
+      (dto.method === 'biometric' && !dto.biometrics?.embedding);
+
+    if (isDeviceBiometric) {
+      verificationResults.push({
+        score: 100,
+        isValid: true,
+        message: 'Verified via native device hardware biometrics on trusted phone.',
+      });
+      verificationFlags.deviceBiometric = true;
+      verificationFlags.deviceBiometricConfirmed = true;
+      biometricScore = 1.0;
+    }
+
+    // 1b. Face Biometrics Pipeline (if active facial challenge payload is provided)
     if (dto.biometrics) {
       if (dto.biometrics.challengeId) {
         const chalResult = await this.biometricCryptoService.validateAndConsumeChallenge(
@@ -198,13 +233,12 @@ export class AttendancesService {
       }
     }
 
-    // 2. Triple-Layer Location & Beacon Verification
+    // 2. Location & Beacon Telemetry (Audit / Non-blocking for device biometric punches)
     const branch = employee.department?.branch;
-    if (dto.method === 'gps' || dto.location || dto.beacon) {
+    if (dto.location || dto.beacon) {
       let beaconResult: VerificationResult | undefined;
       if (dto.beacon && branch?.beacons) {
         beaconResult = this.locationVerificationService.verifyBeacon(branch.beacons, dto.beacon);
-        verificationResults.push(beaconResult);
         verificationFlags.beaconVerified = beaconResult.isValid;
       }
 
@@ -216,11 +250,30 @@ export class AttendancesService {
       };
 
       const locResult = this.locationVerificationService.verify(branchData, dto.location, beaconResult);
-      verificationResults.push(locResult);
       verificationFlags.locationVerified = locResult.isValid;
       if (dto.location) {
         verificationFlags.isMockGpsChecked = !dto.location.isMockLocation;
       }
+
+      if (isDeviceBiometric) {
+        // Log location for audit without blocking attendance
+        verificationResults.push({
+          score: locResult.isValid ? 20 : 10,
+          isValid: true,
+          message: locResult.message,
+        });
+      } else {
+        verificationResults.push(locResult);
+      }
+    } else if (dto.method === 'gps') {
+      const branchData = {
+        latitude: branch?.latitude || null,
+        longitude: branch?.longitude || null,
+        geofenceRadius: branch?.geofenceRadius || null,
+        geofenceZones: branch?.geofenceZones || [],
+      };
+      const locResult = this.locationVerificationService.verify(branchData, dto.location);
+      verificationResults.push(locResult);
     }
 
     // 3. Shift Evaluation
@@ -326,6 +379,23 @@ export class AttendancesService {
       throw new NotFoundException('Employee not found in this tenant');
     }
 
+    // Trusted Device Binding Verification (Anti-Buddy Punching)
+    if (dto.deviceUuid) {
+      const trustedDevice = await this.prisma.device.findFirst({
+        where: {
+          employeeId: employee.id,
+          isTrusted: true,
+        },
+      });
+      if (trustedDevice && trustedDevice.deviceUuid !== dto.deviceUuid) {
+        throw new ForbiddenException({
+          statusCode: 403,
+          error: 'DEVICE_BOUND_TO_ANOTHER_PHONE',
+          message: 'Attendance punch must be recorded from your registered trusted device.',
+        });
+      }
+    }
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
@@ -347,12 +417,18 @@ export class AttendancesService {
       throw new BadRequestException('Already checked out today.');
     }
 
+    const existingFlags = (existing.verificationFlags as Record<string, any>) || {};
+    if (dto.deviceBiometricConfirmed) {
+      existingFlags.deviceBiometricCheckOut = true;
+    }
+
     const attendance = await this.prisma.attendance.update({
       where: { id: existing.id },
       data: {
         checkOut: new Date(),
         checkOutMethod: dto.method,
         checkOutLocation: dto.location ? (dto.location as any) : undefined,
+        verificationFlags: existingFlags,
       },
       include: {
         employee: {

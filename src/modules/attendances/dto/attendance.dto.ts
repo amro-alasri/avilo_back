@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsObject, IsOptional, ValidateNested, IsNotEmpty, IsString, IsArray } from 'class-validator';
+import { IsEnum, IsNumber, IsObject, IsOptional, ValidateNested, IsNotEmpty, IsString, IsArray, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 import { AttendanceMethod } from '../../../../prisma/generated/prisma/enums.js';
 
@@ -78,6 +78,10 @@ export class CheckInDto {
   deviceUuid?: string;
 
   @IsOptional()
+  @IsBoolean()
+  deviceBiometricConfirmed?: boolean;
+
+  @IsOptional()
   kioskDeviceId?: string;
 }
 
@@ -102,6 +106,10 @@ export class CheckOutDto {
 
   @IsOptional()
   deviceUuid?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  deviceBiometricConfirmed?: boolean;
 
   @IsOptional()
   kioskDeviceId?: string;
