@@ -584,13 +584,169 @@ export class AttendancesService {
     });
   }
 
-  async findAll(tenantId: string, page: number = 1, limit: number = 10, startDate?: string, endDate?: string) {
+  async getOrganizationHeatmap(tenantId: string, year: number = new Date().getFullYear()) {
+    const yearStart = new Date(Date.UTC(year, 0, 1, 0, 0, 0));
+    const yearEnd = new Date(Date.UTC(year + 1, 0, 1, 0, 0, 0));
+
+    const [totalActiveEmployees, attendances] = await Promise.all([
+      this.prisma.employee.count({
+        where: { tenantId, status: 'active' },
+      }),
+      this.prisma.attendance.findMany({
+        where: {
+          tenantId,
+          date: { gte: yearStart, lt: yearEnd },
+        },
+        select: {
+          id: true,
+          date: true,
+          status: true,
+          checkIn: true,
+          checkOut: true,
+          confidenceScore: true,
+          checkInMethod: true,
+        },
+        orderBy: { date: 'asc' },
+      }),
+    ]);
+
+    const dayMap: Record<
+      string,
+      {
+        date: string;
+        totalPunches: number;
+        present: number;
+        late: number;
+        absent: number;
+        halfDay: number;
+        biometricCount: number;
+        totalWorkMinutes: number;
+      }
+    > = {};
+
+    let totalPunches = 0;
+    let totalPresent = 0;
+    let totalLate = 0;
+    let totalAbsent = 0;
+
+    for (const att of attendances) {
+      const dateKey =
+        att.date instanceof Date
+          ? att.date.toISOString().split('T')[0]
+          : String(att.date).substring(0, 10);
+
+      if (!dayMap[dateKey]) {
+        dayMap[dateKey] = {
+          date: dateKey,
+          totalPunches: 0,
+          present: 0,
+          late: 0,
+          absent: 0,
+          halfDay: 0,
+          biometricCount: 0,
+          totalWorkMinutes: 0,
+        };
+      }
+
+      const item = dayMap[dateKey];
+      item.totalPunches++;
+      totalPunches++;
+
+      if (att.status === 'present') {
+        item.present++;
+        totalPresent++;
+      } else if (att.status === 'late') {
+        item.late++;
+        totalLate++;
+        totalPresent++;
+      } else if (att.status === 'absent') {
+        item.absent++;
+        totalAbsent++;
+      } else if (att.status === 'half_day') {
+        item.halfDay++;
+        totalPresent += 0.5;
+      }
+
+      if (att.checkInMethod === 'biometric') {
+        item.biometricCount++;
+      }
+
+      if (att.checkIn && att.checkOut) {
+        const diff = Math.max(
+          0,
+          Math.floor(
+            (new Date(att.checkOut).getTime() - new Date(att.checkIn).getTime()) /
+              (1000 * 60),
+          ),
+        );
+        item.totalWorkMinutes += diff;
+      }
+    }
+
+    return {
+      year,
+      totalActiveEmployees,
+      dayMap,
+      summary: {
+        totalRecords: attendances.length,
+        totalPunches,
+        totalPresent,
+        totalLate,
+        totalAbsent,
+        onTimeRate:
+          totalPresent > 0
+            ? Math.round(((totalPresent - totalLate) / totalPresent) * 100)
+            : 100,
+      },
+    };
+  }
+
+  async findAll(
+    tenantId: string,
+    page: number = 1,
+    limit: number = 10,
+    startDate?: string,
+    endDate?: string,
+    date?: string,
+    status?: string,
+    search?: string,
+  ) {
     const where: any = { tenantId };
 
-    if (startDate && endDate) {
+    if (date) {
+      const parts = date.split('-').map(Number);
+      if (parts.length === 3) {
+        const [y, m, d] = parts;
+        const dStart = new Date(Date.UTC(y, m - 1, d, 0, 0, 0));
+        const dEnd = new Date(Date.UTC(y, m - 1, d + 1, 0, 0, 0));
+        where.date = { gte: dStart, lt: dEnd };
+      } else {
+        const dStart = new Date(date);
+        dStart.setHours(0, 0, 0, 0);
+        const dEnd = new Date(dStart);
+        dEnd.setDate(dEnd.getDate() + 1);
+        where.date = { gte: dStart, lt: dEnd };
+      }
+    } else if (startDate && endDate) {
       where.date = {
         gte: new Date(startDate),
         lte: new Date(endDate),
+      };
+    }
+
+    if (status && status !== 'all') {
+      where.status = status;
+    }
+
+    if (search && search.trim() !== '') {
+      const q = search.trim();
+      where.employee = {
+        OR: [
+          { firstName: { contains: q, mode: 'insensitive' } },
+          { lastName: { contains: q, mode: 'insensitive' } },
+          { employeeNumber: { contains: q, mode: 'insensitive' } },
+          { jobTitle: { contains: q, mode: 'insensitive' } },
+        ],
       };
     }
 
@@ -606,7 +762,7 @@ export class AttendancesService {
         },
         skip,
         take: limit,
-        orderBy: { date: 'desc' },
+        orderBy: [{ date: 'desc' }, { checkIn: 'desc' }],
       }),
       this.prisma.attendance.count({ where }),
     ]);

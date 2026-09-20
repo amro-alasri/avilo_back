@@ -144,6 +144,14 @@ export class AttendancesController {
     });
   }
 
+  @Get('organization-heatmap')
+  async getOrganizationHeatmap(
+    @TenantId() tenantId: string,
+    @Query('year') year?: string,
+  ) {
+    return this.attendancesService.getOrganizationHeatmap(tenantId, year ? +year : new Date().getFullYear());
+  }
+
   @Get('me/today')
   async getMyTodayAttendance(@CurrentUser('userId') userId: string, @TenantId() tenantId: string) {
     return this.attendancesService.getMyTodayAttendance(this.resolveUserId(userId), tenantId);
@@ -156,7 +164,19 @@ export class AttendancesController {
     @Query('limit') limit: string = '10',
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
+    @Query('date') date?: string,
+    @Query('status') status?: string,
+    @Query('search') search?: string,
   ) {
-    return this.attendancesService.findAll(tenantId, +page, +limit, startDate, endDate);
+    return this.attendancesService.findAll(
+      tenantId,
+      +page,
+      +limit,
+      startDate,
+      endDate,
+      date,
+      status,
+      search,
+    );
   }
 }
