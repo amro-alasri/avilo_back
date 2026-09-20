@@ -100,7 +100,7 @@ export class FaceVerificationService {
       };
     } catch (error: any) {
       this.logger.error(`Failed to persist biometric template: ${error.message}`, error.stack);
-      throw new BadRequestException(`فشل حفظ بصمة الوجه في قاعدة البيانات: ${error.message}`);
+      throw new BadRequestException(`Failed to save face biometric template: ${error.message}`);
     }
   }
 

@@ -422,7 +422,7 @@ export class AttendancesService {
         statusCode: 400,
         error: 'Bad Request',
         code: 'FACE_NOT_ENROLLED',
-        message: `عذراً، لم يقم الموظف (${lookup.fullName}) بتسجيل بصمة الوجه بعد. يرجى تسجيل بصمة الوجه أولاً عبر تطبيق الجوال لتفعيل بصمة الحضور.`,
+        message: `Employee (${lookup.fullName}) has not enrolled face biometrics yet. Please complete face enrollment via the mobile app first to enable biometric attendance.`,
         details: {
           employeeNumber: lookup.employeeNumber,
           fullName: lookup.fullName,

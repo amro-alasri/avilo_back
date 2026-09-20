@@ -250,7 +250,7 @@ export class EmployeesService {
         },
         attendances: {
           orderBy: { date: 'desc' },
-          take: 30,
+          take: 365,
         },
         leaveBalances: {
           include: { leaveType: true },

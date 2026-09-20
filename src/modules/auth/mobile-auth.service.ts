@@ -66,7 +66,7 @@ export class MobileAuthService {
           throw new ForbiddenException({
             statusCode: 403,
             error: 'DEVICE_BOUND_TO_ANOTHER_PHONE',
-            message: `هذا الحساب مقترن بهاتف آخر (${existingDevice.deviceModel || 'جهاز مسجل'}). لا يُسمح بتسجيل الدخول من جهاز جديد لمنع التلاعب. يرجى التواصل مع إدارة الموارد البشرية لفك ارتباط الجهاز السابق.`,
+            message: `This account is linked to another device (${existingDevice.deviceModel || 'Registered Device'}). Login from a new device is restricted to prevent tampering. Please contact HR to unlink your previous device.`,
             registeredDeviceModel: existingDevice.deviceModel,
             boundAt: existingDevice.createdAt,
           });
@@ -179,7 +179,7 @@ export class MobileAuthService {
       throw new ForbiddenException({
         statusCode: 403,
         error: 'UNTRUSTED_DEVICE',
-        message: 'الجهاز الحالي غير مقترن بهذا الحساب. يرجى تسجيل الدخول بكلمة المرور أولاً لربط الجهاز المعتمد.',
+        message: 'Current device is not linked to this account. Please sign in with your password first to bind your trusted device.',
       });
     }
 
