@@ -2,6 +2,7 @@ import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { MobileAuthService } from './mobile-auth.service.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterEmployeeDto } from './dto/register-employee.dto.js';
+import { BiometricLoginDto } from './dto/biometric-login.dto.js';
 import { Public } from '../../core/decorators/public.decorator.js';
 
 @Public()
@@ -13,6 +14,12 @@ export class MobileAuthController {
   @HttpCode(HttpStatus.OK)
   login(@Body() loginDto: LoginDto, @Body('tenantSlug') tenantSlug: string) {
     return this.mobileAuthService.mobileLogin(loginDto, tenantSlug);
+  }
+
+  @Post('biometric-login')
+  @HttpCode(HttpStatus.OK)
+  biometricLogin(@Body() dto: BiometricLoginDto) {
+    return this.mobileAuthService.biometricLogin(dto);
   }
 
   @Post('register')

@@ -298,6 +298,33 @@ export class EmployeesService {
     return { success: true, message: 'Face biometric template reset successfully' };
   }
 
+  async unlinkDevice(tenantId: string, employeeId: string, deviceId: string) {
+    await this.findOne(tenantId, employeeId);
+
+    await this.prisma.device.deleteMany({
+      where: {
+        id: deviceId,
+        employeeId,
+        tenantId,
+      },
+    });
+
+    return { success: true, message: 'Device unlinked successfully' };
+  }
+
+  async resetDevices(tenantId: string, employeeId: string) {
+    await this.findOne(tenantId, employeeId);
+
+    await this.prisma.device.deleteMany({
+      where: {
+        employeeId,
+        tenantId,
+      },
+    });
+
+    return { success: true, message: 'All devices unlinked successfully' };
+  }
+
   async update(tenantId: string, id: string, dto: UpdateEmployeeDto) {
     const employee = await this.findOne(tenantId, id);
 

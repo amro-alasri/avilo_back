@@ -37,6 +37,20 @@ export class EmployeesController {
     return this.employeesService.resetBiometricTemplate(tenantId, id);
   }
 
+  @Delete(':id/devices/:deviceId')
+  unlinkDevice(
+    @TenantId() tenantId: string,
+    @Param('id') id: string,
+    @Param('deviceId') deviceId: string,
+  ) {
+    return this.employeesService.unlinkDevice(tenantId, id, deviceId);
+  }
+
+  @Delete(':id/devices')
+  resetDevices(@TenantId() tenantId: string, @Param('id') id: string) {
+    return this.employeesService.resetDevices(tenantId, id);
+  }
+
   @Delete(':id')
   remove(@TenantId() tenantId: string, @Param('id') id: string) {
     return this.employeesService.remove(tenantId, id);

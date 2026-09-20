@@ -1,22 +1,21 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
-export class LoginDto {
+export class BiometricLoginDto {
+  @IsString()
+  @IsNotEmpty()
+  tenantSlug: string;
+
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(6)
-  password: string;
+  deviceUuid: string;
 
   @IsString()
-  @IsOptional()
-  tenantSlug?: string;
-
-  @IsString()
-  @IsOptional()
-  deviceUuid?: string;
+  @IsNotEmpty()
+  biometricToken: string;
 
   @IsString()
   @IsOptional()
